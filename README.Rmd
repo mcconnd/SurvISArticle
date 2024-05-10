@@ -3,7 +3,7 @@ title: Survival Extrapolation Incorporating External Information Using Importanc
   Sampling
 author: "NCPE"
 date: "`r Sys.Date()`"
-output: html_document
+output: rmarkdown::github_document
 ---
 
 ```{r setup, include=FALSE}
