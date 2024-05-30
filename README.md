@@ -2,7 +2,7 @@ Survival Extrapolation Incorporating External Information Using
 Importance Sampling
 ================
 NCPE
-2024-05-10
+2024-05-30
 
 ## Basic Usage
 
@@ -180,15 +180,15 @@ fit$post_mean
 ```
 
     ##     shape     scale 
-    ## 0.2196108 4.1746629
+    ## 0.2205064 4.1733832
 
 ``` r
 fit$post_cov
 ```
 
     ##              shape       scale
-    ## shape  0.009386534 -0.01187727
-    ## scale -0.011877274  0.02369849
+    ## shape  0.009497905 -0.01180935
+    ## scale -0.011809346  0.02341346
 
 However, it is probably a good idea to examine the output before doing
 this. To do this we have provided the function `expert_surv_viz_gg`
@@ -219,26 +219,25 @@ is_surv_viz_gg(
 ## Example with 2 timepoints
 
 This time we modify the preceding example to include additional
-information on survival at 10 years. Indeed, suppose that specify a
-prior distribution for 10-year OS with mean 0.1 and with 95% density
+information on survival at 10 years. Indeed, suppose that we specify a
+prior distribution for 10-year OS with median 0.1 and with 97.5% density
 contained in the region bounded above by 0.25. To avoid assigning a
 nontrivial prior probability to values below zero, we use a lognormal
 distribution.
 
 ``` r
 # External Information at 10 years
-log.se<-(log(0.25)-log(0.1))/(qnorm(0.95))
+sigmalog<-(log(0.25)-log(0.1))/1.96
 
-log.mu<-log(0.1)-log.se^2/2
-# Fix this later
+mulog<-log(0.1)
 
 # Specification of the prior
 ex.info.2<-list("tstar"=c(60,120),
                   "loss"=function(x){dnorm(x[1],mean=mu_t,sd=sigma_t,log=TRUE)+
-                      dlnorm(x[2],meanlog=log.mu,sdlog=log.se,log=TRUE)
+                      dlnorm(x[2],meanlog=mulog,sdlog=sigmalog,log=TRUE)
                       },
-                  "lower.probs"=c(0.2,qlnorm(0.025,meanlog=log.mu,sdlog = log.se)),
-                  "upper.probs"=c(0.55,qlnorm(0.975,meanlog=log.mu,sdlog = log.se))
+                  "lower.probs"=c(0.2,qlnorm(0.025,meanlog=mulog,sdlog = sigmalog)),
+                  "upper.probs"=c(0.55,qlnorm(0.975,meanlog=mulog,sdlog = sigmalog))
                 )
 ```
 
@@ -265,7 +264,3 @@ is_surv_viz_gg(
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
-
-## To do list
-
-Make specification of the priors easier
