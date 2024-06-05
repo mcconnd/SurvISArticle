@@ -499,6 +499,8 @@ trans<-function(dist,sims)
 ## Edit DMC 20240215: new parameter 'tmax' for maximum time used to compute AUC.
 ## Default to max of tseq2
 
+## Edit DMC 20240605: get rid of 'survtimes' output to improve speed
+
 get_sims<-function(dist,coeff,cov,nsim=5000,tst=tstar,times=tseq2,tmax=max(tseq2))
 {
   out<-list()
@@ -530,12 +532,15 @@ get_sims<-function(dist,coeff,cov,nsim=5000,tst=tstar,times=tseq2,tmax=max(tseq2
   
   # Compute matrix of survival time estimates
   S_mat <- matrix(0, nrow = length(times), ncol = nsim)
-  for(t1 in 1:length(times))
-  {S_mat[t1, ] <- s_fun(trans_pars=out[["sims.nat"]], 
-                        dist=dist, 
-                        t = times[t1])}
+  S_mat<-t(sapply(times,
+                  function(x) {s_fun(t=x,dist=dist,trans_pars=out[["sims.nat"]])}
+                  ))
+  #for(t1 in 1:length(times))
+  #{S_mat[t1, ] <- s_fun(trans_pars=out[["sims.nat"]], 
+  #                      dist=dist, 
+  #                      t = times[t1])}
   
-  out[["survtimes"]]<-bind_cols(data.frame("time"=times),data.frame(S_mat))
+  #out[["survtimes"]]<-bind_cols(data.frame("time"=times),data.frame(S_mat))
   
   # Quantiles of survival esimtates over time
   

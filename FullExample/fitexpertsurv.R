@@ -54,4 +54,5 @@ for(i in 1:6)
                                          upr=t.max)
   
 }
+rm(expertsurv_models)
 saveRDS(exs.sims,file="exs.sims.RDS")

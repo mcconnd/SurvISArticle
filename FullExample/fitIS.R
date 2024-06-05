@@ -23,5 +23,5 @@ for (dist in dists)
 }
 
 # Save outputs for later use
-saveRDS(is.models,"ISModels.RDS")
-saveRDS(is.sims,"ISSims.RDS")
+saveRDS(is.models,"./output/ISModels.RDS")
+saveRDS(is.sims,"./output/ISSims.RDS")
