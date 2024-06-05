@@ -1,0 +1,1012 @@
+---
+title: "Survival extrapolation - comparison of methods"
+author: "NCPE"
+date: "July 2023"
+geometry: margin=2cm
+output: word_document
+---
+
+```{r setup, include=FALSE}
+
+# 20240214 DMC: set maximum of tseq2 to be lifetime horizon (100 years in this case)
+## Need to update corresponding code for expertsurv
+# Need to edit plots to show maximum time of 15 years.
+
+#library(survHE)
+# library(expertsurv)
+library(tidyverse)
+library(flexsurv)
+# Extra packages for plotting
+library(GGally)
+library(ggpubr)
+# Uncomment to install from github:
+#devtools::install_github("psyteachr/introdataviz")
+#library(introdataviz)
+# Format code chunks nicely
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE,cache=TRUE,tidy=TRUE, tidy.opts=list(width.cutoff=60)
+                      )
+
+# Do this next time you run the models
+set.seed(12345)
+
+```
+
+
+```{r expertutils}
+## Additional convenience functions to produce outputs for plotting and analysis
+
+
+source("functions.R")
+# Load transforms etc.
+#inv_transforms<-readRDS("inv_transforms.RDS")
+#transforms<-readRDS("transforms.RDS")
+#d_funs<-readRDS("d_funs.RDS")
+
+
+```
+
+# Example: Extrapolation of overall surival from KEYNOTE-453
+
+## Methods
+
+As an illustrative example, we apply our method to the extrapolation of immature overall survival data that has been previously used to inform cost-effectiveness models. The KEYNOTE-453 study investigated pembrolizumab plus axitinib versus sunitinib for the first-line treatment of advanced renal-cell carcinoma (Rini et al N Engl J Med 2019; 380:1116-1127 DOI: 10.1056/NEJMoa1816714). Data from the first interim analysis of this study was used to inform HTA submissions to both the NCPE and NICE for this indication, with parametric extrapolations of PFS and OS data from this analysis used to model treatment effectiveness in a partitioned survival model. Here we focus solely on overall survival in the pembrolizumab plus axitinib arm, which was identified as a major area of uncertainty by both HTA agencies.
+
+As the parameter estimates from the original cost-effectiveness models were not available, published Kaplan-Meier curves were digitised (using X) and the six 'standard' parametric models were fit using flexsurv. 
+
+Expert opinion on expected 5-year OS with pembrolizumab plus axitinib was sought and recorded by both the NCPE (data on file) and NICE (link) during their respective evaluation processes. Based on the range of opinions presented, the authors concluded that a range of 20% to 55% represented a reasonable summary of the experts' combined beliefs about anticipated 5-year OS. A normal prior distribution for 5-year OS was thus constructed, with 95% prior density contained in the interval 20% to 55%. 
+
+For the distributions fitted to digitised pseudo-IPD, summary survival parameter estimates and covariance matrices were extracted from flexsurv output. These were combined with the prior distribution for 5-year OS using the importance sampling method described in section X, in order to obtain multivariate normal approximations of the posterior distributions.
+
+The results of the importance sampling method were compared with the maximum likelihood method by examining distributions of the following outputs:
+- survival curves 
+- joint parameter distributions 
+- area under the curve, i.e. mean lifetime OS
+
+Finally, outputs from our method were compared with those from the expertsurv package.
+
+
+## Input data and priors
+
+For this example we use digitised OS pseudodata from the pembrolizumab + axitinib arm of KEYNOTE-453, as of interim analysis 1. 
+
+
+```{r loadIPD}
+ipd.list <- readRDS("ipd.list.RDS")
+surv.IPD <- ipd.list$ia1.OS.PA$IPD
+
+#Formula
+surv.form <- Surv(time, status)~1
+
+## Timepoints for plotting
+
+tseq2 <- seq(0, 12*20, len = 1e4)
+
+
+
+``` 
+
+
+## Extrapolation using MLE
+
+Fit parametric curves using flexsurv and examine the output.
+
+```{r MLEmodels}
+# Distribution names
+dists<-c("exponential","weibull","gompertz","lognormal",
+                "llogis","gengamma")
+
+# List of survfit objects
+mle.fits<-list()
+
+## Data frame of fitted survival curves (mean values only)
+mle.points<-data.frame("time"=tseq2)
+
+# Fit curves and save output
+for(dist in dists)
+{
+  fit<-flexsurvreg(formula=surv.form,
+                   data=surv.IPD,
+                   dist=dist)
+  mle.fits[[dist]]<-fit
+  
+  #plot(fit,t=tseq2,xlim=c(0,60))
+  
+  mle.points[,dist]<-summary(fit,t=tseq2)[[1]]$est
+}
+
+# Extract KM estimates for plotting
+
+KM.df<-data.frame("time"=summary(survfit(formula = surv.form,data=surv.IPD))[["time"]],
+                  "OS"=summary(survfit(formula = surv.form,data=surv.IPD))[["surv"]],
+                  "OS.lwr"=summary(survfit(formula = surv.form,data=surv.IPD))[["lower"]],
+                  "OS.upr"=summary(survfit(formula = surv.form,data=surv.IPD))[["upper"]]
+                  )
+
+
+# Plot all 6 curves to check for errors
+
+mle.points.df<-pivot_longer(mle.points,cols=2:7,names_to="dist",values_to = "OS")
+
+# Uncomment if needed
+#ggplot(data=mle.points.df,aes(x=time,y=OS,colour=dist))+
+#  geom_line()+
+#  geom_step(data=KM.df,aes(x=time,y=OS),colour="black")+  
+#  geom_step(data=KM.df,aes(x=time,y=OS.lwr),colour="black",linetype="dashed")+
+#  geom_step(data=KM.df,aes(x=time,y=OS.upr),colour="black",linetype="dashed")
+
+
+```
+
+
+
+## Expert opinion and construction of a prior distribution
+
+Published NICE committee slides, see slide 24 of https://www.nice.org.uk/guidance/ta650/documents/1, provides a summary of clinical experts' opinion on 5-year OS:
+
+- Company: 50%
+
+- ERG: 50% is optimistic
+
+- NICE technical team: 30%
+
+For the NCPE assessment (data on file), experts were presented with OS predictions from the six standard parametric distributions and asked to comment on their plausibility:
+
+- Expert 1 stated that the curves giving estimates of 20% and 39% were plausible, said nothing about model 3 (45%), and considered all higher estimates of 5-year OS to be implausible. 
+
+-	Expert 2 identified the curve giving a 5-year OS of 45% as the most appropriate, with other ‘plausible’ curves giving a range of 20% to 54%. 
+
+The authors considered a range of 20% to 55% to give a reasonable summary of experts' expectations of 5-year overall survival. For simplicity, a normal distribution was selected for the prior, with 95% prior density contained in the range 20% to 55%.
+
+```{r prior}
+# This is the time point at which the prior for survival is to be specified.
+tstar<-60 # months in this example
+
+## Expert survival based on Clinical Opinion doc Expert 2 Table 1
+## Also accounting for NICE slides https://www.nice.org.uk/guidance/ta650/documents/1 
+lower_prob <- 0.20
+upper_prob <- 0.55
+mu_t <- (lower_prob+upper_prob)/2
+
+
+## Further we assume estimate is normally distributed with 95% confidence between limits
+
+sigma_t <- (upper_prob - mu_t) / (1.96)
+
+
+# Maximum possible OS for computing AUC
+# Set this to 100 years - actually some distributions never converge so we need to make a choice here
+t.max<-12*100
+
+``` 
+
+
+
+
+```{r}
+# Compare the original (MLE) curves with expert opinion.
+ggplot(data=mle.points.df,aes(x=time,y=OS,colour=dist))+
+  geom_line()+
+  geom_segment(x=60,xend=60,y=lower_prob,yend=upper_prob,colour="black")+
+  geom_step(data=KM.df,aes(x=time,y=OS),colour="black")+
+  geom_step(data=KM.df,aes(x=time,y=OS.lwr),colour="black",linetype="dashed")+
+  geom_step(data=KM.df,aes(x=time,y=OS.upr),colour="black",linetype="dashed")
+
+```
+
+
+
+
+
+```{r saveSIMS, cache.lazy=FALSE}
+# To avoid any risk of data leakage we first extract only the (transformed) parameter estimates and covariance matrices
+# This is the only information that is routinely available to the HTA agency from the submitted economic model
+
+# Create a list which contains, for each distribution and corresponding MLE fit,
+# Summary parameter estimates
+# Covariance matrix
+# Distribution name
+# Parameter simulations
+# Transformed parameter simulations
+# Simulated survival predictions at time tstar
+
+
+if(!(file.exists("mle.sims.RDS"))){
+mle.sims<-list()
+for(dist in dists)
+{
+  mle.sims[[dist]]<-get_sims(dist=dist,
+                             coeff=mle.fits[[dist]]$coefficients,
+                             cov=mle.fits[[dist]]$cov,
+                             times=tseq2,
+                             tmax=t.max)
+}
+
+saveRDS(mle.sims,"mle.sims.RDS")
+} else {
+mle.sims<-readRDS("mle.sims.RDS")
+}
+
+saveRDS(mle.fits,"mle.fits.RDS")
+# Delete mle.fits
+rm(mle.fits)
+
+```
+
+
+## Survival extrapolation adjustment using importance sampling
+
+We define an R object `expert.info` that encodes the prior distribution for expert elicited survival at 5 years. This is a list with four elements, a vector of timepoints `tstar` at which prior distributions are specified, and a corresponding vector of functions `loss` which define the prior densities on the log scale. We also include the upper and lower limits of the 95% prior densities for survival at each point. In our case all vectors have length 1 as survival has been elicited at a single time point.
+
+```{r priordist}
+# Expert opinion
+expert.info<-list("tstar"=tstar,
+                  "loss"=function(x){dnorm(x,mean=mu_t,sd=sigma_t,log=TRUE)},
+                  "lower.probs"=lower_prob,
+                  "upper.probs"=upper_prob
+                  )
+
+
+```
+
+Now using both the prior and the MLE parameter estimates from before, we can estimate the posterior parameter distributions for all six parametric survival models. The relevant function here is `expert_surv`.
+
+```{r runAgD, message=FALSE, results='hide'}
+
+if (!file.exists("ISModels.RDS")|!file.exists("ISSims.RDS")){
+# Fit all models, return list of fits
+is.models<-list()
+# List of parameter and survival simulations
+is.sims<-list()
+
+  for (dist in dists)
+  {
+    
+    old.params<-mle.sims[[dist]]
+    
+    # Model fits for later
+    fit<-expert_surv(
+      coeff=old.params$coeff,
+      cov=old.params$cov,
+      dist=dist,
+      expert_info=expert.info
+      )
+    
+    is.models[[dist]]<-fit
+    is.sims[[dist]]<-get_sims(dist=dist,coeff=fit$post_mean,cov=fit$post_cov,tmax=t.max)
+    rm(old.params,fit)
+    
+  }
+
+# Save outputs for later use
+saveRDS(is.models,"ISModels.RDS")
+saveRDS(is.sims,"ISSims.RDS")
+}else{
+  is.models<-readRDS("ISModels.RDS")
+  is.sims<-readRDS("ISSims.RDS")
+}
+
+```
+
+Below we show the posterior median survival time estimates for all 6 curves obtained from the importance sampling approach.
+
+```{r plotIS, message=F}
+# Plot posterior median estimates for all curves
+
+# Extract
+
+is.plot.df<-data.frame()
+
+for (i in 1:6){
+  tmp.df<-data.frame(is.sims[[i]][["survsummary"]]) %>%
+    mutate(Curve=dists[i])
+  
+  is.plot.df<-bind_rows(is.plot.df,tmp.df)
+}
+
+ggplot(data=is.plot.df)+
+  geom_line(aes(x=time,y=S_median,colour=Curve),linewidth=1,alpha=0.8)+
+  geom_segment(x=60,xend=60,y=lower_prob,yend=upper_prob,colour="black")+
+  geom_step(data=KM.df,aes(x=time,y=OS),colour="black")+  
+  geom_step(data=KM.df,aes(x=time,y=OS.lwr),colour="black",linetype="dashed")+
+  geom_step(data=KM.df,aes(x=time,y=OS.upr),colour="black",linetype="dashed")
+
+``` 
+
+The code below produces a nice plot for article showing both methods:
+
+```{r}
+
+## survival curves based on posterior mean parameter estimates (not median as above)
+
+is.mean.df<-data.frame("time"=tseq2)
+
+for (dist in dists)
+{
+  # Transform parameters to natural scale
+  
+
+  pars.nat<-inv_trans(dist=dist,
+                      sims=as.matrix(t(is.models[[dist]][["post_mean"]]),nrow=1,byrow=T))
+
+
+  # Calculate survival times
+  
+  is.mean.df[,dist]=s_fun(tseq2,dist=dist,pars.nat)
+}
+
+
+is.mean.df<-pivot_longer(is.mean.df,cols=2:7,names_to="dist",values_to = "OS") %>%
+  mutate(Method="IS")
+
+
+mle.points.df<-mutate(mle.points.df,Method="MLE")
+
+is.compare.df<-bind_rows(is.mean.df,mle.points.df) %>%
+  mutate(Distribution=dist)
+
+# Named vector for distributions
+distributions<-c("exponential"="Exponential",
+                                      "weibull"="Weibull",
+                                      "lognormal"="Log-normal",
+                                      "llogis"="Log-logistic",
+                                      "gompertz"="Gompertz",
+                                      "gengamma"="Gen. Gamma")
+
+# Rename distributions
+
+is.compare.df$Distribution<-str_replace_all(is.compare.df$Distribution,
+                                    distributions)
+
+
+outplot<-ggplot(data=is.compare.df,aes(x=time,y=OS,colour=Distribution))+
+  geom_line(lwd=1,alpha=0.8)+
+  facet_wrap(.~factor(Method,levels=c("MLE","IS")),nrow=2)+
+  geom_segment(x=60,xend=60,y=mu_t-1.96*sigma_t,yend=mu_t+1.96*sigma_t,lwd=1,colour="grey40")+
+  geom_segment(x=59,xend=61,y=mu_t-1.96*sigma_t,yend=mu_t-1.96*sigma_t,lwd=1,colour="grey40")+
+  geom_segment(x=59,xend=61,y=mu_t+1.96*sigma_t,yend=mu_t+1.96*sigma_t,lwd=1,colour="grey40")+
+  theme_classic()+
+  theme(legend.position = "bottom",
+        panel.grid.major = element_line(colour="gray90"),
+        axis.line.x.bottom = element_line(),
+        plot.caption = element_text(hjust = 0))+
+  labs(x="Months",y="Overall Survival")+
+  scale_x_continuous(limits=c(0,240),breaks = seq(0,240,by=12),expand = expansion(mult=c(0.00,0.02)))+
+  scale_y_continuous(breaks=c(0,0.25,0.5,0.75,1),expand = expansion(mult=c(0.001,0.05)))+
+  geom_step(data=KM.df,aes(x=time,y=OS),colour="black")+  
+  geom_step(data=KM.df,aes(x=time,y=OS.lwr),colour="black",linetype="dashed",lwd=0.5)+
+  geom_step(data=KM.df,aes(x=time,y=OS.upr),colour="black",linetype="dashed",lwd=0.5)
+
+plot(outplot)
+
+#ggsave("plot_mle_is.png",plot=outplot,width=8, height=5,units="in")
+
+outplot_wide<-ggplot(data=is.compare.df,aes(x=time,y=OS,colour=Distribution))+
+  geom_line(lwd=1.2,alpha=0.8)+
+  facet_wrap(factor(Method,levels=c("MLE","IS"))~.,ncol=2)+
+  geom_segment(x=60,xend=60,y=mu_t-1.96*sigma_t,yend=mu_t+1.96*sigma_t,lwd=1,colour="grey40")+
+  geom_segment(x=59,xend=61,y=mu_t-1.96*sigma_t,yend=mu_t-1.96*sigma_t,lwd=1,colour="grey40")+
+  geom_segment(x=59,xend=61,y=mu_t+1.96*sigma_t,yend=mu_t+1.96*sigma_t,lwd=1,colour="grey40")+
+  theme_classic()+
+  theme(legend.position = "bottom",
+        panel.grid.major = element_line(colour="gray90"),
+        axis.line.x.bottom = element_line(),
+        plot.caption = element_text(hjust = 0),
+        text=element_text(size=15))+
+  labs(x="Months",y="Overall Survival")+
+  scale_x_continuous(limits=c(0,120),breaks = seq(0,120,by=12),expand = expansion(mult=c(0.00,0.02)))+
+  scale_y_continuous(breaks=c(0,0.25,0.5,0.75,1),expand = expansion(mult=c(0.001,0.05)))+
+  geom_step(data=KM.df,aes(x=time,y=OS),colour="black")+  
+  geom_step(data=KM.df,aes(x=time,y=OS.lwr),colour="black",linetype="dashed",lwd=0.5)+
+  geom_step(data=KM.df,aes(x=time,y=OS.upr),colour="black",linetype="dashed",lwd=0.5)
+ 
+plot(outplot_wide)
+ggsave("plot_mle_is_pres.png",plot=outplot_wide,width=13, height=5,units="in")
+```
+
+
+
+## Importance sampling: model diagnostics, parameter distributions, and survival estimates
+
+We can now examine importance sampling diagnostics, comparisons of likelihood and posterior parameter distributions, and survival time distributions, using the function `expert_surv_viz_gg`.
+
+
+```{r allplots, results='asis'}
+for (dist in dists)
+{
+  print(knitr::kable(is.models[[dist]][["orig"]]$coefficients,caption="MLE Parameter Estimates"))
+  print(knitr::kable(is.models[[dist]][["orig"]]$cov,caption="MLE Covariance Matrix"))
+  
+ # print(knitr::kable(
+#    list(is.models[[dist]][["orig"]]$coefficients,is.models[[dist]][["orig"]]$cov),
+#    caption = "MLE parameter estimates and covariance matrix"#,
+    #booktabs = TRUE, valign = 't'
+#  ))
+  
+  print(knitr::kable(is.models[[dist]]$post_mean,caption="IS Parameter Estimates"))
+  print(knitr::kable(is.models[[dist]]$post_cov,caption="IS Covariance Matrix"))
+  
+
+  expert_surv_viz_gg(is.models[[dist]],tseq2,tstar,what=1:3,dist=dist)
+}
+
+
+
+```
+
+Compare 'Generalised variance,' i.e., determinants of variance-covariance matrices. This gives the area of the 95% highest density ellipse and can be interpreted as a 1-parameter measure of parameter uncertainty. See https://stats.stackexchange.com/questions/12762/measure-of-spread-of-a-multivariate-normal-distribution .
+
+
+
+```{r param_effects,results='asis'}
+
+param.uncertainty<-data.frame("Distribution"=dists,"Distance"=rep(NA,6),"MLE Variance"=rep(NA,6),"IS Variance"=rep(NA,6),"Ratio"=rep(NA,6))
+
+for (i in seq_along(dists))
+{
+  param.uncertainty[i,2]<-sqrt(sum((is.models[[dists[i]]][["orig"]]$coefficients-is.models[[dists[i]]]$post_mean)^2))
+  param.uncertainty[i,3]<-det(as.matrix(is.models[[dists[i]]][["orig"]]$cov))
+  param.uncertainty[i,4]<-det(as.matrix(is.models[[dists[i]]]$post_cov))
+  param.uncertainty[i,5]<-param.uncertainty[i,4]/param.uncertainty[i,3]
+  
+}
+
+knitr::kable((param.uncertainty))
+
+```
+
+
+## Distributions of mean lifetime overall survival
+
+Area under the survival curve, or equivalently, mean survival time, gives a convenient one parameter summary of each parameter draw. However, since some parameter draws produce survival estimates that plateau, the AUC is infinite. To address this we need to truncate the survival curves somewhere, i.e. compute RMST. The choice of timepoint is arbitrary and affects the results; we have used 100 years here since this is expected to exceed maximum survival for this cohort of patients.
+
+We compute this for 5000 parameter simulations obtained from the two methods to examine the impact that incorporating expert prior information has on mean survival.
+
+
+
+```{r AUC,fig.dim = c(8, 6)}
+
+#AUC for the models
+
+auc.is<-data.frame(matrix(NA,nrow=5000,ncol=6))
+names(auc.is)<-dists
+auc.mle<-auc.is
+
+
+for( dist in dists)
+{
+  auc.is[dist]<-is.sims[[dist]][["AUC"]]
+  auc.mle[dist]<-mle.sims[[dist]][["AUC"]]
+}
+
+
+auc.is["Method"]="IS"
+auc.mle["Method"]="MLE"
+
+auc.df<-bind_rows(auc.is,auc.mle) %>%
+  pivot_longer(1:6,
+               names_to="Distribution",
+               values_to="AUC") %>%
+  mutate(Distribution=str_replace_all(Distribution,distributions))
+
+
+### AUC (actually 100 year RMST) summary
+auc.summary<-auc.df %>%
+  group_by(Distribution,Method) %>%
+  summarise(mean=mean(AUC),
+            sd=sd(AUC),
+            median=median(AUC),
+            lwr.95=quantile(AUC,0.025),
+            upr.95=quantile(AUC,0.975)) 
+
+
+
+
+print(auc.summary)
+
+# Colourblind palette
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+
+## Uncomment if density plot needed
+#ggplot(data=auc.df,aes(x=AUC,colour=Method,fill=Method))+
+  #geom_histogram(binwidth = 1)+
+#  geom_density(alpha=0.5)+
+#  facet_wrap(Distribution~.,ncol = 2)+
+#  scale_fill_manual(values=cbPalette[2:3])+
+#  scale_colour_manual(values=cbPalette[2:3])+
+#  labs(x="AUC (Mean lifetime OS, Months)",y="Density")+
+#  theme(legend.position="bottom")
+
+# Summarise effect on variance
+
+auc.summary %>%
+  select(Distribution,Method,sd)%>%
+pivot_wider(names_from=Method,
+            values_from=sd) %>%
+  mutate(Ratio=IS/MLE)
+  
+# Alternative version of plot
+library(ggridges)
+
+## What proportion of iterations give AUC > 20, 30, 40 years?
+
+auc.df %>% mutate(Over20y=as.numeric(AUC>20*12),Over30y=as.numeric(AUC>30*12)) %>%
+  group_by(Distribution,Method) %>%
+  summarise(PropOver20y=mean(Over20y),
+            PropOver30y=mean(Over30y))
+
+
+
+
+# No truncation of AUC values but truncation of graph
+g.auc<-ggplot(data=auc.df,aes(x=AUC,y=Distribution,colour=Method,fill=Method))+
+  geom_density_ridges(alpha=0.5,scale=0.95)+
+  scale_fill_manual(values=cbPalette[2:3])+
+  scale_colour_manual(values=cbPalette[2:3])+
+  labs(x="AUC (Mean lifetime OS, Months)",y="Density")+
+  xlim(0,360)
+
+# Truncate AUC at 240 months for plotting
+auc.df.plot<-mutate(auc.df,AUC=pmin(AUC,240))
+
+# AUC values and graph tuncated
+g.auc2<-ggplot(data=auc.df.plot,aes(x=AUC,y=Distribution,colour=Method,fill=Method))+
+  geom_density_ridges(alpha=0.5,scale=0.95,trim=TRUE)+
+  scale_fill_manual(values=cbPalette[2:3])+
+  scale_colour_manual(values=cbPalette[2:3])+
+  labs(x="AUC (Mean lifetime OS, Months)",y="Density")+
+  xlim(0,240)
+  
+g.auc
+
+```
+
+
+
+## Probability distributions for survival at time tstar
+
+Finally, we also compare the distribution of survival time estimates at time tstar obtained from the MLE and expert opinion approaches, with the elicited prior probabilities for this parameter.
+
+```{r plotStstar,fig.dim = c(8, 6)}
+
+## This code plots probability density of survival estimates at time tstar from the prior, likelihood, and 'posterior'
+
+surv.tstar<-data.frame()
+
+for (dist in dists)
+{
+  tmp.df<-data.frame("MLE"=unname(mle.sims[[dist]][["s.tstar"]]),
+                     "IS"=unname(is.sims[[dist]][["s.tstar"]]),
+                     "Prior"=rnorm(5000,mu_t,sigma_t),
+                     "dist"=dist)
+  surv.tstar<-bind_rows(surv.tstar,tmp.df)
+}
+
+surv.tstar.long<-pivot_longer(surv.tstar,cols=1:3,values_to = "S.tstar") %>%
+  mutate(Output=factor(name,levels=c("Prior","IS","MLE")),
+         Distribution=str_replace_all(dist,distributions))
+
+
+## Observed 5 year OS from https://ascopubs.org/doi/abs/10.1200/JCO.2023.41.17_suppl.LBA4501
+s5.obs<-0.419
+
+
+
+surv.tstar.summary<-surv.tstar.long %>% 
+  filter(name!="Prior")%>%
+  rename(Method=Output)%>%
+  mutate(sq.err=(S.tstar-s5.obs)^2,abs.err=abs(S.tstar-s5.obs)) %>%
+  group_by(Distribution,Method) %>%
+  summarise(mean=mean(S.tstar),
+            median=median(S.tstar),
+            sd=sd(S.tstar),
+            lwr.95=quantile(S.tstar,0.025),
+            upr.95=quantile(S.tstar,0.975),
+            MSE=mean(sq.err),
+            MAE=mean(abs.err))# %>%
+  #pivot_wider(names_from = name, values_from = c(mean,sd)) %>%
+  #select(-mean_Prior,-sd_Prior)
+
+print(surv.tstar.summary)
+
+# Old GG density plot - uncomment if needed
+
+#ggplot(data=surv.tstar.long,
+#       aes(x=S.tstar,
+#           y=..density..,
+#           colour=Output,
+#           fill=Output))+
+#  geom_density(alpha=0.5)+
+#  facet_wrap(.~Distribution,nrow=2,scales = "fixed")+
+#  scale_color_manual(values=cbPalette)+
+#  scale_fill_manual(values=cbPalette)+
+#  scale_x_continuous(labels = scales::percent)+
+#  labs(x="5 year lankmark OS",y="Density")+
+#  theme(legend.title = element_blank(),
+#        legend.position="bottom")
+
+## GGridges plot
+
+g.ststar<-ggplot(data=surv.tstar.long,aes(x=S.tstar,y=Distribution,colour=Output,fill=Output))+
+  geom_density_ridges(alpha=0.5,scale=1)+
+  scale_fill_manual(values=cbPalette)+
+  scale_colour_manual(values=cbPalette)+
+  labs(x="5-year landmark OS",y="Density")
+  
+g.ststar2<-g.ststar+theme(text=element_text(size=14))
+
+ggsave("plot_s5.png",plot=g.ststar2,width=7,height=7,units="in")
+```
+
+
+Plot both AUC and 5-year landmark OS together:
+
+```{r}
+
+# New code (grobs)
+g.auc2<-g.auc+theme(legend.position = "none")
+g.ststar2<-g.ststar+labs(y=element_blank())+theme(axis.text.y=element_blank(),axis.ticks.y=element_blank())
+
+# Extract legend
+
+library(ggpubr)
+plot.auc.ststar<- ggarrange(g.auc,g.ststar2,
+                            nrow=1,common.legend = TRUE,
+                            legend = "bottom",
+                            widths=c(1.3,1),
+                            legend.grob = get_legend(g.ststar2,position="bottom"))
+
+print(plot.auc.ststar)
+
+
+
+ggsave("plot_auc_s5_new.png",plot.auc.ststar,width=7,height=7,units="in")
+#ggsave("plot_auc_s5_wide.png",plot.auc.ststar,width=14,height=5,units="in")
+
+
+
+
+```
+
+
+
+
+## Summary Table for Article
+
+```{r sumtable}
+
+# Diagnostic table - proportion of survival curve iterations where survival is
+# greater than 1% at 100 years
+
+s.100y<-data.frame()
+s.100y[1:2,"Method"]<-c("MLE","IS")
+for (d in dists)
+{
+
+  s.100y[1,d]<-sum(
+    as.numeric( # IF S(100y)>0.01 1 ELSE 0
+    s_fun(t=100*12,
+          dist=d,
+          trans_pars = mle.sims[[d]][["sims.nat"]])>0.01
+  ))/5000
+  
+    s.100y[2,d]<-sum(
+    as.numeric( # IF S(100y)>0.01 1 ELSE 0
+    s_fun(t=100*12,
+          dist=d,
+          trans_pars = is.sims[[d]][["sims.nat"]])>0.01
+  ))/5000
+  
+}
+
+s.100y
+
+
+library(scales)
+
+
+
+# Summary table of survival at time t_star
+# Calculate mean difference and variance ratio 
+# All other code is just formatting
+
+s.tstar.print<-surv.tstar.summary %>%
+  pivot_wider(names_from = Method,values_from = 3:9) %>% 
+   mutate(mean_diff=mean_IS-mean_MLE,
+         var.ratio=sd_IS^2/sd_MLE^2) %>%
+   select(Distribution,
+         mean_MLE,lwr.95_MLE,upr.95_MLE,
+         mean_IS,lwr.95_IS,upr.95_IS,
+         mean_diff, 
+         var.ratio,
+         MSE_MLE,MSE_IS,
+         MAE_MLE,MAE_IS
+         )%>%
+  ungroup()%>%
+  mutate((across(mean_MLE:mean_diff,~percent(.x,accuracy=0.01))),
+         var.ratio=format(round(var.ratio,2),nsmall=2),
+         across(MSE_MLE:MAE_IS,~format(round(.x,3),nsmall=3))) %>%
+  mutate(MLE=paste0(mean_MLE," (",lwr.95_MLE,", ",upr.95_MLE,")"),
+         IS=paste0(mean_IS," (",lwr.95_IS,", ",upr.95_IS,")")
+         ) %>%
+  ungroup() %>%
+  select(Distribution,MLE,IS,mean_diff,var.ratio,MSE_MLE,MSE_IS,MAE_MLE,MAE_IS) 
+
+knitr::kable(s.tstar.print)
+
+write.csv(s.tstar.print,"summary.ststar.csv")
+
+# Same for AUC
+
+auc.print <- auc.summary %>%
+   pivot_wider(names_from = Method,values_from = 3:7) %>% 
+  mutate(mean_diff=mean_IS-mean_MLE,
+         var.ratio=sd_IS^2/sd_MLE^2) %>% 
+  mutate(across(where(is.numeric),~format(round(.x,2),nsmall=2)))  %>%
+  mutate(MLE=paste0(mean_MLE," (",lwr.95_MLE,", ",upr.95_MLE,")"),
+         IS=paste0(mean_IS," (",lwr.95_IS,", ",upr.95_IS,")"),
+         Var.Ratio=var.ratio
+         ) %>%
+  ungroup() %>%
+  select(Distribution,MLE,IS,Mean.Diff=mean_diff,Var.Ratio) 
+
+
+knitr::kable(auc.print)
+write.csv(auc.print,"summary.auc.csv")
+
+
+```
+
+
+
+```{r varbetween}
+# Calculation of 'between distributions' variance
+
+# AUC
+auc.ss<-auc.summary %>%
+  ungroup()%>%
+  select(Distribution,Method,mean,sd) %>%
+  pivot_wider(names_from = Method, values_from = c(mean,sd)) %>%
+  mutate(ess_IS=(mean_IS-mean(mean_IS))^2,
+         ess_MLE=(mean_MLE-mean(mean_MLE))^2)
+
+colMeans(auc.ss[,5:6])
+colMeans(auc.ss[,5])/colMeans(auc.ss[,6])
+
+# 5-year OS
+
+ststar.ss<-surv.tstar.summary %>%
+  ungroup()%>%
+  select(Distribution,Method,mean,sd) %>%
+  pivot_wider(names_from = Method, values_from = c(mean,sd)) %>%
+  mutate(ess_IS=(mean_IS-mean(mean_IS))^2,
+         ess_MLE=(mean_MLE-mean(mean_MLE))^2)
+
+
+colMeans(ststar.ss[,6:7])
+colMeans(ststar.ss[,6])/colMeans(ststar.ss[,7])
+
+```
+
+# Comparison with expertsurv package output
+
+```{r expertsurv, results='hide', message=FALSE}
+ # Load simulations from expertsurv output
+if(file.exists("exs.sims.RDS")){
+  exs.sims<-readRDS("exs.sims.RDS")
+} else
+{
+  library(expertsurv)
+  ## Note: for some reason it is much better to run this code outside of Rmarkdown, and reload the output in the next code chunk. Remove 'eval=F' to rerun.
+## Prior list for IPD method
+expert_op <- list()
+expert_op[[1]] <- data.frame(dist = c("norm"),
+                                         wi = c(1),
+                                         param1 = c(mu_t),
+                                         param2 = c(sigma_t),
+                                         param3 = c(NA))
+
+
+
+# Fit all models
+expertsurv_models  <- fit.models.expert(
+  formula=surv.form,
+  data=surv.IPD,
+  distr=c("exp","wei","gomp","lognormal","loglogistic","gengamma"),
+  method="hmc",
+  iter = 5000,
+  pool_type = "linear pool", 
+  opinion_type = "survival",
+  times_expert = tstar, 
+  param_expert = expert_op)
+
+# Plots
+
+plot(expertsurv_models,add.km=TRUE,nsim=5000,t=0:max(tseq2))
+  
+## Data frames for sampled survival estimates, AUC, and parameters from all curves
+
+
+# List of data frames containing simulated survival estimates over time. 
+exs.sims<-list()
+#names(exs.surv)<-dists
+
+# List that will contain data frames of parameter draws
+#exs.params<-exs.surv
+
+# Simulations
+for(i in 1:6)
+{
+  exs.sims[[dists[i]]]<-list()
+  #Simulate survival
+  
+  surv.points<-make.surv(expertsurv_models,mod=i,t=tseq2,nsim=5000)
+  surv.mat<-as.matrix(surv.points$mat[[1]])
+  
+  # Data frame containing columns for time and quantiles (2.5%,50%,97.5%) of posterior survival probabilities 
+  surv.plotdata<-cbind(surv.mat[,1],t(apply(surv.mat,1,quantile,c(0.025,0.5,0.975))))
+  colnames(surv.plotdata)<-c("time","S_lower","S_median","S_upper")
+  
+  exs.sims[[dists[i]]][["survsummary"]]<-data.frame(surv.plotdata)
+  
+  # Parameter simulations (natural scale)
+  
+  exs.sims[[dists[i]]][["sims.nat"]]<-as.matrix(surv.points[["sim"]][[1]])
+  
+  # Parameter simulations (MVN scale)
+  exs.sims[[dists[i]]][["sims.mvn"]]<-trans(dist=dists[i],
+                         sims=as.matrix(surv.points[["sim"]][[1]]))
+  
+  #AUC
+  exs.sims[[dists[i]]][["AUC"]]<-get_auc(exs.sims[[dists[i]]][["sims.mvn"]],
+                                         dist = dists[i],
+                                         upr=t.max)
+  
+}
+saveRDS(exs.sims,file="exs.sims.RDS")
+
+  
+}
+```
+
+## Comparisons of survival curves
+
+```{r compareSurv, message=F, warning=F,fig.width=7,fig.height=4}
+
+# Extract list of survival estimates (median and 95% CrI over time)
+surv.list<-list()
+
+for(i in 1:6)
+{
+  # IS method
+  is.surv.df<-data.frame(is.sims[[dists[i]]][["survsummary"]])
+  is.surv.df["Method"]="IS"
+  is.surv.df["Curve"]<-distributions[dists[i]]
+  
+  # expertsurv method
+  exs.surv.df<-data.frame(exs.sims[[dists[i]]][["survsummary"]])
+  exs.surv.df["Method"]="expertsurv"
+  exs.surv.df["Curve"]<-distributions[dists[i]]
+  
+  surv.df.tmp<-rbind.data.frame(is.surv.df,exs.surv.df) 
+  
+  surv.list[[distributions[dists[i]]]]<-surv.df.tmp
+}
+
+
+## Add a final data frame containing all models in case a single plot is required
+
+surv.list[["All"]]<-do.call(rbind.data.frame,surv.list[1:6])
+
+
+## Make plots
+
+# By curve type
+for(i in 1:6)
+{
+  g<-ggplot(data=surv.list[[i]],aes(x=time,colour=Method,fill=Method))+
+      geom_line(aes(y=S_median),lwd=1)+
+      geom_ribbon(aes(ymin=S_lower,ymax=S_upper),alpha=0.1,linetype="dashed")+
+      labs(y="S(t)",x="time (t)",title=paste0("Survival - ",distributions[dists[i]]))
+ 
+  print(g)
+  
+}
+# Plot all curves together for main article (maybe?)
+g.all<-ggplot(data=surv.list[[7]],aes(x=time,colour=Method,fill=Method))+
+  geom_line(aes(y=S_median),lwd=1)+
+  geom_ribbon(aes(ymin=S_lower,ymax=S_upper),alpha=0.1,linetype="dashed")+
+  labs(y="S(t)",x="time (t)")+
+  facet_wrap(.~Curve,nrow=3)+
+  scale_x_continuous(limits=c(0,180),breaks = seq(0,180,by=12))+
+  theme_light()+
+  theme(legend.position="bottom",
+        text=element_text(size=14),
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+print(g.all)
+
+ggsave("surv.comp.all.png",g.all,width=10,height=7,units="in")
+``` 
+### Comparisons of parameter distributions
+
+
+```{r plotparams,message=F, warning=F}
+
+
+for(i in 1:6){
+# Extract parameter draws from the two types of model fit and merge
+  df1<-data.frame(is.sims[[dists[i]]][["sims.mvn"]],"Method"=rep("IS",5000))
+  
+  df2<-data.frame(exs.sims[[dists[i]]][["sims.mvn"]],"Method"=rep("expertsurv",5000))
+  
+  names(df2)<-names(df1)
+  
+  df<-bind_rows(df1,df2)
+  
+print(ggpairs(df, aes(colour = Method, alpha = 0.4),
+              columns = 1:(ncol(df)-1),
+              title=paste0("Parameters - ",distributions[dists[i]])))
+}
+  
+``` 
+
+### Comparisons of AUC distributions
+
+```{r AUCcomp}
+
+#AUC for the models
+
+auc.is<-data.frame(matrix(NA,nrow=5000,ncol=6))
+names(auc.is)<-dists
+auc.exs<-auc.is
+
+
+for(dist in dists)
+{
+  auc.is[dist]<-is.sims[[dist]][["AUC"]]
+  auc.exs[dist]<-exs.sims[[dist]][["AUC"]]
+}
+
+auc.is["Method"]="IS"
+auc.exs["Method"]="expersurv"
+
+auc.df<-bind_rows(auc.is,auc.exs) %>%
+  pivot_longer(1:6,
+               names_to="Distribution",
+               values_to="AUC")
+
+auc.summary<-auc.df %>%
+  group_by(Distribution,Method) %>%
+  summarise(mean=mean(AUC),
+            sd=sd(AUC),
+            median=median(AUC),
+            lwr.95=quantile(AUC,0.025),
+            upr.95=quantile(AUC,0.975)) 
+
+print(auc.summary)
+
+ggplot(data=auc.df,aes(x=AUC,colour=Method,fill=Method))+
+  geom_histogram(binwidth = 1)+
+  facet_grid(Distribution~Method)
+
+ggplot(data=auc.df,aes(x=AUC,colour=Method))+
+  geom_density()+
+  facet_wrap(Distribution~.,nrow=2)
+  
+
+```
+
+
+```{r}
+knitr::knit_exit()
+```
+
+
+
+ 
+
+## Comparisons of parameter draws
+
