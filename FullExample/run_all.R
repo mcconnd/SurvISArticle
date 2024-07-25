@@ -21,6 +21,7 @@ if(file.exists("./output/is.sims.RDS"))
 
 
 # Fit curves with expertsurv
+# Slow - do not run until needed!
 if(file.exists("./output/exs.sims.RDS"))
 {
   exs.sims<-readRDS("./output/exs.sims.RDS")
