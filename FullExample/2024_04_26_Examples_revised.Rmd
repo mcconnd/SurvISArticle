@@ -704,10 +704,6 @@ for (d in dists)
 s.100y
 
 
-library(scales)
-
-
-
 # Summary table of survival at time t_star
 # Calculate mean difference and variance ratio 
 # All other code is just formatting

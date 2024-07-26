@@ -56,14 +56,6 @@ mle.points.df<-mutate(mle.points.df,Method="MLE")
 is.compare.df<-bind_rows(is.mean.df,mle.points.df) %>%
   mutate(Distribution=dist)
 
-# Named vector for distributions
-distributions<-c("exponential"="Exponential",
-                 "weibull"="Weibull",
-                 "lognormal"="Log-normal",
-                 "llogis"="Log-logistic",
-                 "gompertz"="Gompertz",
-                 "gengamma"="Gen. Gamma")
-
 # Rename distributions
 
 is.compare.df$Distribution<-str_replace_all(is.compare.df$Distribution,

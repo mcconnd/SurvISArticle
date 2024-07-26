@@ -1,6 +1,7 @@
 source("../functions.R")
 library(tidyverse)
 library(flexsurv)
+library(expertsurv)
 set.seed(12345)
 
 
@@ -23,6 +24,14 @@ tseq2 <- seq(0, 12*20, len = 1e4)
 # Distribution names
 dists<-c("exponential","weibull","gompertz","lognormal",
          "llogis","gengamma")
+
+# Long names of distributions (named vector)
+distributions<-c("exponential"="Exponential",
+                 "weibull"="Weibull",
+                 "lognormal"="Log-normal",
+                 "llogis"="Log-logistic",
+                 "gompertz"="Gompertz",
+                 "gengamma"="Gen. Gamma")
 
 # Maximum possible OS for computing AUC
 # Set this to 100 years - actually some distributions never converge so we need to make a choice here
@@ -61,4 +70,6 @@ expert_op[[1]] <- data.frame(dist = c("norm"),
                              param2 = c(sigma_t),
                              param3 = c(NA))
 
+# Colourblind palette for plots
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
