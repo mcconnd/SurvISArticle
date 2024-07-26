@@ -30,17 +30,7 @@ surv.list[["All"]]<-do.call(rbind.data.frame,surv.list[1:6])
 
 ## Make plots
 
-# By curve type
-for(i in 1:6)
-{
-  g<-ggplot(data=surv.list[[i]],aes(x=time,colour=Method,fill=Method))+
-    geom_line(aes(y=S_median),lwd=1)+
-    geom_ribbon(aes(ymin=S_lower,ymax=S_upper),alpha=0.1,linetype="dashed")+
-    labs(y="S(t)",x="time (t)",title=paste0("Survival - ",distributions[dists[i]]))
-  
-  print(g)
-  
-}
+
 # Plot all curves together for main article (maybe?)
 g.all<-ggplot(data=surv.list[[7]],aes(x=time,colour=Method,fill=Method))+
   geom_line(aes(y=S_median),lwd=1)+

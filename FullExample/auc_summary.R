@@ -35,7 +35,7 @@ auc.summary<-auc.df %>%
             lwr.95=quantile(AUC,0.025),
             upr.95=quantile(AUC,0.975)) 
 
-print(auc.summary)
+#print(auc.summary)
 
 
 
@@ -50,4 +50,4 @@ g.auc<-ggplot(data=auc.df,aes(x=AUC,y=Distribution,colour=Method,fill=Method))+
   labs(x="AUC (Mean lifetime OS, Months)",y="Density")+
   xlim(0,360)
 
-g.auc
+##g.auc

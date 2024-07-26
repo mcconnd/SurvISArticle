@@ -15,7 +15,7 @@ expertsurv_models  <- fit.models.expert(
 plot(expertsurv_models,add.km=TRUE,nsim=5000,t=0:max(tseq2))
 
 
-saveRDS(expertsurv_models,"expertsurv_models.RDS")
+saveRDS(expertsurv_models,"./output/expertsurv_models.RDS")
 
 
 ## Data frames for sampled survival estimates, AUC, and parameters from all curves
@@ -55,4 +55,4 @@ for(i in 1:6)
   
 }
 rm(expertsurv_models)
-saveRDS(exs.sims,file="exs.sims.RDS")
+saveRDS(exs.sims,file="./output/exs.sims.RDS")

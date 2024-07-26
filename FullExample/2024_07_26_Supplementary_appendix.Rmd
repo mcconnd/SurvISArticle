@@ -81,12 +81,14 @@ for (dist in dists)
   print(knitr::kable(is.models[[dist]]$post_cov,caption="IS Covariance Matrix"))
   
 
-  expert_surv_viz_gg(is.models[[dist]],tseq2,tstar,what=1:3,dist=dist)
+  is_surv_viz_gg(is.models[[dist]],tseq2,tstar,what=1:3,dist=dist)
 }
 
 
 
 ```
+
+## Parameter variability
 
 Compare 'Generalised variance,' i.e., determinants of variance-covariance matrices. This gives the area of the 95% highest density ellipse and can be interpreted as a 1-parameter measure of parameter uncertainty. See https://stats.stackexchange.com/questions/12762/measure-of-spread-of-a-multivariate-normal-distribution .
 
@@ -110,15 +112,52 @@ knitr::kable((param.uncertainty))
 ```
 
 
-```{r}
-knitr::knit_exit()
+# Comparison with expertsurv output
+
+## Plots of survival curves over time
+
+```{r expersurvIS}
+source("comp_expertsurv.R")
+# By curve type
+for(i in 1:6)
+{
+  g<-ggplot(data=surv.list[[i]],aes(x=time,colour=Method,fill=Method))+
+    geom_line(aes(y=S_median),lwd=1)+
+    geom_ribbon(aes(ymin=S_lower,ymax=S_upper),alpha=0.1,linetype="dashed")+
+    labs(y="S(t)",x="time (t)",title=paste0("Survival - ",distributions[dists[i]]))
+  
+  print(g)
+  
+}
 ```
 
+### Comparisons of parameter distributions
 
 
-### Comparisons of AUC distributions
+```{r plotparams,message=F, warning=F}
 
-```{r AUCcomp}
+library(GGally)
+
+for(i in dists){
+# Extract parameter draws from the two types of model fit and merge
+  df1<-data.frame(is.sims[[i]][["sims.mvn"]],"Method"=rep("IS",5000))
+  
+  df2<-data.frame(exs.sims[[i]][["sims.mvn"]],"Method"=rep("expertsurv",5000))
+  
+  names(df2)<-names(df1)
+  
+  df<-bind_rows(df1,df2)
+  
+print(ggpairs(df, aes(colour = Method, alpha = 0.4),
+              columns = 1:(ncol(df)-1),
+              title=paste0("Parameters - ",distributions[i])))
+}
+  
+``` 
+
+## Comparisons of AUC distributions
+
+```{r AUC}
 
 #AUC for the models
 
@@ -134,14 +173,14 @@ for(dist in dists)
 }
 
 auc.is["Method"]="IS"
-auc.exs["Method"]="expersurv"
+auc.exs["Method"]="expertsurv"
 
-auc.df<-bind_rows(auc.is,auc.exs) %>%
+auc.df2<-bind_rows(auc.is,auc.exs) %>%
   pivot_longer(1:6,
                names_to="Distribution",
                values_to="AUC")
 
-auc.summary<-auc.df %>%
+auc.summary2<-auc.df2 %>%
   group_by(Distribution,Method) %>%
   summarise(mean=mean(AUC),
             sd=sd(AUC),
@@ -149,22 +188,77 @@ auc.summary<-auc.df %>%
             lwr.95=quantile(AUC,0.025),
             upr.95=quantile(AUC,0.975)) 
 
-print(auc.summary)
+# Same for AUC
 
-ggplot(data=auc.df,aes(x=AUC,colour=Method,fill=Method))+
-  geom_histogram(binwidth = 1)+
-  facet_grid(Distribution~Method)
+auc.print2 <- auc.summary2 %>%
+  pivot_wider(names_from = Method,values_from = 3:7) %>% 
+  mutate(mean_diff=mean_IS-mean_expertsurv,
+         var.ratio=sd_IS^2/sd_expertsurv^2) %>% 
+  mutate(across(where(is.numeric),~format(round(.x,2),nsmall=2)))  %>%
+  mutate(expertsurv=paste0(mean_expertsurv," (",lwr.95_expertsurv,", ",upr.95_expertsurv,")"),
+         IS=paste0(mean_IS," (",lwr.95_IS,", ",upr.95_IS,")"),
+         Var.Ratio=var.ratio
+  ) %>%
+  ungroup() %>%
+  select(Distribution,expertsurv,IS,Mean.Diff=mean_diff,Var.Ratio) 
 
-ggplot(data=auc.df,aes(x=AUC,colour=Method))+
-  geom_density()+
-  facet_wrap(Distribution~.,nrow=2)
-  
+knitr::kable(auc.print2)
+
+# AUC density plot
+# No truncation of AUC values but truncation of graph
+library(ggridges)
+
+g.auc<-ggplot(data=auc.df2,aes(x=AUC,y=Distribution,colour=Method,fill=Method))+
+  geom_density_ridges(alpha=0.5,scale=0.95)+
+  scale_fill_manual(values=cbPalette[2:3])+
+  scale_colour_manual(values=cbPalette[2:3])+
+  labs(x="AUC (Mean lifetime OS, Months)",y="Density")+
+  xlim(0,360)+
+  theme(legend.position = "bottom")
+
+g.auc
+  knitr::knit_exit()
 
 ```
 
 
 
- 
 
-## Comparisons of parameter draws
+## Comparisons of 5-year OS
 
+```{r ststar}
+
+surv.tstar2<-data.frame()
+
+for (dist in dists)
+{
+  tmp.df<-data.frame("expertsurv"=unname(exs.sims[[dist]][["s.tstar"]][["survsummary"]]),
+                     "IS"=unname(is.sims[[dist]][["s.tstar"]]),
+                     "dist"=dist)
+  surv.tstar2<-bind_rows(surv.tstar2,tmp.df)
+  rm(tmp.df)
+}
+
+surv.tstar.long2<-pivot_longer(surv.tstar2,cols=1:2,values_to = "S.tstar") %>%
+  mutate(Output=factor(name,levels=c("IS","expertsurv")),
+         Distribution=str_replace_all(dist,distributions))
+
+surv.tstar.summary2<-surv.tstar.long2 %>% 
+  group_by(Distribution,Method) %>%
+  summarise(mean=mean(S.tstar),
+            median=median(S.tstar),
+            sd=sd(S.tstar),
+            lwr.95=quantile(S.tstar,0.025),
+            upr.95=quantile(S.tstar,0.975))
+
+knitr::kable(surv.tstar.summary2)
+
+g.ststar2<-ggplot(data=surv.tstar.long2,aes(x=S.tstar,y=Distribution,colour=Output,fill=Output))+
+  geom_density_ridges(alpha=0.5,scale=1)+
+  scale_fill_manual(values=cbPalette)+
+  scale_colour_manual(values=cbPalette)+
+  labs(x="5-year landmark OS",y="Density")
+
+g.ststar2
+
+```

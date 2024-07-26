@@ -6,15 +6,17 @@ source("setup.R")
 # Fit curves with MLE
 if(file.exists("./output/mle.sims.RDS"))
 {
+  mlt.fits<-readRDS("./output/mle.fits.RDS")
   mle.sims<-readRDS("./output/mle.sims.RDS")
 } else {
   source("fitMLE.R")
 }
 
 # Fit curves with IS
-if(file.exists("./output/is.sims.RDS"))
+if(file.exists("./output/ISSims.RDS"))
 {
-  is.sims<-readRDS("./output/is.sims.RDS")
+  is.models<-readRDS("./output/ISModels.RDS")
+  is.sims<-readRDS("./output/ISSims.RDS")
 } else {
   source("fitIS.R")
 }
@@ -24,6 +26,7 @@ if(file.exists("./output/is.sims.RDS"))
 # Slow - do not run until needed!
 if(file.exists("./output/exs.sims.RDS"))
 {
+  expertsurv_models<-("./output/expertsurv_models.RDS")
   exs.sims<-readRDS("./output/exs.sims.RDS")
 } else {
   source("fitexpertsurv.R")
