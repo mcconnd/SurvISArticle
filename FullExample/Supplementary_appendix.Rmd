@@ -1,0 +1,274 @@
+---
+title: "Survival extrapolation - Supplementary Appendix"
+author: "NCPE"
+date: "October 2024"
+geometry: margin=2cm
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+
+# 20240214 DMC: set maximum of tseq2 to be lifetime horizon (100 years in this case)
+## Need to update corresponding code for expertsurv
+# Need to edit plots to show maximum time of 15 years.
+
+#library(survHE)
+# library(expertsurv)
+library(tidyverse)
+library(flexsurv)
+# Extra packages for plotting
+library(GGally)
+library(ggpubr)
+# Uncomment to install from github:
+#devtools::install_github("psyteachr/introdataviz")
+#library(introdataviz)
+# Format code chunks nicely
+library(formatR)
+
+knitr::opts_chunk$set(echo = FALSE,
+                      message= FALSE, 
+                      warning=FALSE, 
+                      cache=TRUE,
+                      tidy=TRUE,
+                      dev = 'png',
+                      tidy.opts=list(width.cutoff=60)
+                      )
+
+# Do this next time you run the models
+set.seed(12345)
+
+```
+
+
+```{r run}
+# Fit the models etc
+source("setup.R")
+source("run_all.R")
+```
+
+
+
+## Expert opinion and construction of a prior distribution
+
+Published NICE committee slides, see slide 24 of https://www.nice.org.uk/guidance/ta650/documents/1, provides a summary of clinical experts' opinion on 5-year OS:
+
+- Company: 50%
+
+- ERG: 50% is optimistic
+
+- NICE technical team: 30%
+
+For the NCPE assessment (data on file), experts were presented with OS predictions from the six standard parametric distributions and asked to comment on their plausibility:
+
+- Expert 1 stated that the curves giving estimates of 20% and 39% were plausible, said nothing about model 3 (45%), and considered all higher estimates of 5-year OS to be implausible. 
+
+-	Expert 2 identified the curve giving a 5-year OS of 45% as the most appropriate, with other ‘plausible’ curves giving a range of 20% to 54%. 
+
+The authors considered a range of 20% to 55% to give a reasonable summary of experts' expectations of 5-year overall survival. For simplicity, a normal distribution was selected for the prior, with 95% prior density contained in the range 20% to 55%.
+
+## Importance sampling: model diagnostics, parameter distributions, and survival estimates
+
+We can now examine importance sampling diagnostics, comparisons of likelihood and posterior parameter distributions, and survival time distributions, using the function `expert_surv_viz_gg`.
+
+
+```{r allplots, results='asis'}
+for (dist in dists)
+{
+  print(knitr::kable(is.models[[dist]][["orig"]]$coefficients,caption="MLE Parameter Estimates"))
+  print(knitr::kable(is.models[[dist]][["orig"]]$cov,caption="MLE Covariance Matrix"))
+  
+ # print(knitr::kable(
+#    list(is.models[[dist]][["orig"]]$coefficients,is.models[[dist]][["orig"]]$cov),
+#    caption = "MLE parameter estimates and covariance matrix"#,
+    #booktabs = TRUE, valign = 't'
+#  ))
+  
+  print(knitr::kable(is.models[[dist]]$post_mean,caption="IS Parameter Estimates"))
+  print(knitr::kable(is.models[[dist]]$post_cov,caption="IS Covariance Matrix"))
+  
+
+  is_surv_viz_gg(is.models[[dist]],tseq2,tstar,what=1:3,dist=dist)
+}
+
+
+
+```
+
+## Parameter variability
+
+Compare 'Generalised variance,' i.e., determinants of variance-covariance matrices. This gives the area of the 95% highest density ellipse and can be interpreted as a 1-parameter measure of parameter uncertainty. See https://stats.stackexchange.com/questions/12762/measure-of-spread-of-a-multivariate-normal-distribution .
+
+
+
+```{r param_effects,results='asis'}
+
+param.uncertainty<-data.frame("Distribution"=dists,"Distance"=rep(NA,6),"MLE Variance"=rep(NA,6),"IS Variance"=rep(NA,6),"Ratio"=rep(NA,6))
+
+for (i in seq_along(dists))
+{
+  param.uncertainty[i,2]<-sqrt(sum((is.models[[dists[i]]][["orig"]]$coefficients-is.models[[dists[i]]]$post_mean)^2))
+  param.uncertainty[i,3]<-det(as.matrix(is.models[[dists[i]]][["orig"]]$cov))
+  param.uncertainty[i,4]<-det(as.matrix(is.models[[dists[i]]]$post_cov))
+  param.uncertainty[i,5]<-param.uncertainty[i,4]/param.uncertainty[i,3]
+  
+}
+
+knitr::kable((param.uncertainty))
+
+```
+
+
+# Comparison with expertsurv output
+
+## Plots of survival curves over time
+
+```{r expersurvIS}
+source("comp_expertsurv.R")
+# By curve type
+for(i in 1:6)
+{
+  g<-ggplot(data=surv.list[[i]],aes(x=time,colour=Method,fill=Method))+
+    geom_line(aes(y=S_median),lwd=1)+
+    geom_ribbon(aes(ymin=S_lower,ymax=S_upper),alpha=0.1,linetype="dashed")+
+    labs(y="S(t)",x="time (t)",title=paste0("Survival - ",distributions[dists[i]]))
+  
+  print(g)
+  
+}
+```
+
+### Comparisons of parameter distributions
+
+
+```{r plotparams,message=F, warning=F}
+
+library(GGally)
+
+for(i in dists){
+# Extract parameter draws from the two types of model fit and merge
+  df1<-data.frame(is.sims[[i]][["sims.mvn"]],"Method"=rep("IS",5000))
+  
+  df2<-data.frame(exs.sims[[i]][["sims.mvn"]],"Method"=rep("expertsurv",5000))
+  
+  names(df2)<-names(df1)
+  
+  df<-bind_rows(df1,df2)
+  
+print(ggpairs(df, aes(colour = Method, alpha = 0.4),
+              columns = 1:(ncol(df)-1),
+              title=paste0("Parameters - ",distributions[i])))
+}
+  
+``` 
+
+## Comparisons of AUC distributions
+
+```{r AUC}
+
+#AUC for the models
+
+auc.is<-data.frame(matrix(NA,nrow=5000,ncol=6))
+names(auc.is)<-dists
+auc.exs<-auc.is
+
+
+for(dist in dists)
+{
+  auc.is[dist]<-is.sims[[dist]][["AUC"]]
+  auc.exs[dist]<-exs.sims[[dist]][["AUC"]]
+}
+
+auc.is["Method"]="IS"
+auc.exs["Method"]="expertsurv"
+
+auc.df2<-bind_rows(auc.is,auc.exs) %>%
+  pivot_longer(1:6,
+               names_to="Distribution",
+               values_to="AUC")
+
+auc.summary2<-auc.df2 %>%
+  group_by(Distribution,Method) %>%
+  summarise(mean=mean(AUC),
+            sd=sd(AUC),
+            median=median(AUC),
+            lwr.95=quantile(AUC,0.025),
+            upr.95=quantile(AUC,0.975)) 
+
+# Same for AUC
+
+auc.print2 <- auc.summary2 %>%
+  pivot_wider(names_from = Method,values_from = 3:7) %>% 
+  mutate(mean_diff=mean_IS-mean_expertsurv,
+         var.ratio=sd_IS^2/sd_expertsurv^2,
+         Distribution=str_replace_all(Distribution,distributions)) %>% 
+  mutate(across(where(is.numeric),~format(round(.x,2),nsmall=2)))  %>%
+  mutate(expertsurv=paste0(mean_expertsurv," (",lwr.95_expertsurv,", ",upr.95_expertsurv,")"),
+         IS=paste0(mean_IS," (",lwr.95_IS,", ",upr.95_IS,")"),
+         Var.Ratio=var.ratio
+  ) %>%
+  ungroup() %>%
+  select(Distribution,expertsurv,IS,Mean.Diff=mean_diff,Var.Ratio) 
+
+knitr::kable(auc.print2)
+
+# AUC density plot
+# No truncation of AUC values but truncation of graph
+library(ggridges)
+
+g.auc<-ggplot(data=auc.df2,aes(x=AUC,y=Distribution,colour=Method,fill=Method))+
+  geom_density_ridges(alpha=0.5,scale=0.95)+
+  scale_fill_manual(values=cbPalette[2:3])+
+  scale_colour_manual(values=cbPalette[2:3])+
+  labs(x="AUC (Mean lifetime OS, Months)",y="Density")+
+  xlim(0,360)+
+  theme(legend.position = "bottom")
+
+g.auc
+  
+
+```
+
+
+
+
+## Comparisons of 5-year OS
+
+```{r ststar}
+library(scales)
+
+surv.tstar2<-data.frame()
+
+for (dist in dists)
+{
+  tmp.df<-data.frame("expertsurv"=unname(exs.sims[[dist]][["s.tstar"]]),
+                     "IS"=unname(is.sims[[dist]][["s.tstar"]]),
+                     "dist"=dist)
+  surv.tstar2<-bind_rows(surv.tstar2,tmp.df)
+  rm(tmp.df)
+}
+
+surv.tstar.long2<-pivot_longer(surv.tstar2,cols=1:2,values_to = "S.tstar") %>%
+  mutate(Output=factor(name,levels=c("IS","expertsurv")),
+         Distribution=str_replace_all(dist,distributions))
+
+surv.tstar.summary2<-surv.tstar.long2 %>% 
+  group_by(Distribution,Output) %>%
+  summarise(mean=mean(S.tstar),
+            median=median(S.tstar),
+            sd=sd(S.tstar),
+            lwr.95=quantile(S.tstar,0.025),
+            upr.95=quantile(S.tstar,0.975)) %>%
+  ungroup %>%
+  mutate(across(where(is.numeric),~percent(.x,accuracy=0.01))) 
+
+knitr::kable(surv.tstar.summary2)
+
+g.ststar2<-ggplot(data=surv.tstar.long2,aes(x=S.tstar,y=Distribution,colour=Output,fill=Output))+
+  geom_density_ridges(alpha=0.5,scale=1)+
+  scale_fill_manual(values=cbPalette)+
+  scale_colour_manual(values=cbPalette)+
+  labs(x="5-year landmark OS",y="Density")
+
+g.ststar2
+
+```

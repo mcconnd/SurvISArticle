@@ -24,6 +24,7 @@ saveRDS(expertsurv_models,"./output/expertsurv_models.RDS")
 # List of data frames containing simulated survival estimates over time. 
 exs.sims<-list()
 
+expertsurv_models<-readRDS("./output/expertsurv_models.RDS")
 
 # Simulations
 for(i in 1:6)
@@ -52,7 +53,20 @@ for(i in 1:6)
   exs.sims[[dists[i]]][["AUC"]]<-get_auc(exs.sims[[dists[i]]][["sims.mvn"]],
                                          dist = dists[i],
                                          upr=t.max)
+  #Ststar
+  exs.sims[[dists[i]]][["s.tstar"]]<-as.numeric(surv.mat[which.min(abs(surv.mat[,1]-tstar)),2:ncol(surv.mat)])
   
 }
+
+# Post-hoc fix - not needed now I hope!
+#for(i in 1:6){
+  
+#  surv.points<-make.surv(expertsurv_models,mod=i,t=tseq2,nsim=5000)
+#  surv.mat<-as.matrix(surv.points$mat[[1]])
+#Ststar
+#exs.sims[[dists[i]]][["s.tstar"]]<-as.numeric(surv.mat[which.min(abs(surv.mat[,1]-tstar)),2:ncol(surv.mat)])
+
+#}
+
 rm(expertsurv_models)
 saveRDS(exs.sims,file="./output/exs.sims.RDS")

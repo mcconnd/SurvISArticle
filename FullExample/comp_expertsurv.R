@@ -43,6 +43,6 @@ g.all<-ggplot(data=surv.list[[7]],aes(x=time,colour=Method,fill=Method))+
         text=element_text(size=14),
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
-print(g.all)
+#print(g.all)
 
 ggsave("./output/surv.comp.all.png",g.all,width=10,height=7,units="in")
