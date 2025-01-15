@@ -64,7 +64,10 @@ is.compare.df$Distribution<-str_replace_all(is.compare.df$Distribution,
 
 outplot<-ggplot(data=is.compare.df,aes(x=time,y=OS,colour=Distribution))+
   geom_line(lwd=1,alpha=0.8)+
-  facet_wrap(.~factor(Method,levels=c("MLE","IS")),nrow=2)+
+  facet_wrap(.~factor(Method,
+                      levels=c("MLE","IS"),
+                      labels=c("Trial data only","Trial data with external information")),
+             nrow=2)+
   geom_segment(x=60,xend=60,y=mu_t-1.96*sigma_t,yend=mu_t+1.96*sigma_t,lwd=1,colour="grey40")+
   geom_segment(x=59,xend=61,y=mu_t-1.96*sigma_t,yend=mu_t-1.96*sigma_t,lwd=1,colour="grey40")+
   geom_segment(x=59,xend=61,y=mu_t+1.96*sigma_t,yend=mu_t+1.96*sigma_t,lwd=1,colour="grey40")+
@@ -86,7 +89,10 @@ ggsave("./output/plot_mle_is.png",plot=outplot,width=5, height=6,units="in")
 
 outplot_wide<-ggplot(data=is.compare.df,aes(x=time,y=OS,colour=Distribution))+
   geom_line(lwd=1.2,alpha=0.8)+
-  facet_wrap(factor(Method,levels=c("MLE","IS"))~.,ncol=2)+
+  facet_wrap(factor(Method,
+                    levels=c("MLE","IS"),
+                    labels=c("Trial data only","Trial data with external information"))~.,
+             ncol=2)+
   geom_segment(x=60,xend=60,y=mu_t-1.96*sigma_t,yend=mu_t+1.96*sigma_t,lwd=1,colour="grey40")+
   geom_segment(x=59,xend=61,y=mu_t-1.96*sigma_t,yend=mu_t-1.96*sigma_t,lwd=1,colour="grey40")+
   geom_segment(x=59,xend=61,y=mu_t+1.96*sigma_t,yend=mu_t+1.96*sigma_t,lwd=1,colour="grey40")+

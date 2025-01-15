@@ -13,7 +13,10 @@ for (dist in dists)
 }
 
 surv.tstar.long<-pivot_longer(surv.tstar,cols=1:3,values_to = "S.tstar") %>%
-  mutate(Output=factor(name,levels=c("Prior","IS","MLE")),
+  mutate(Output=factor(name,levels=c("Prior","IS","MLE"),
+                       labels=c("External Information",
+                                "Trial data with external information",
+                                "Trial data only")),
          Distribution=str_replace_all(dist,distributions))
 
 
