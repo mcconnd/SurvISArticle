@@ -307,6 +307,9 @@ is_surv_viz_gg <- function(is_surv, times=tseq2,
   ind[what] <- TRUE
   ## assess alpha -- diagnostic plots
   
+  ## list to save plots
+  outplots<-list()
+  
   if(ind[1]) {
     
     df<-data.frame("alpha"=is_surv$alpha_vec,
@@ -320,10 +323,12 @@ is_surv_viz_gg <- function(is_surv, times=tseq2,
       geom_line()+
       geom_vline(xintercept=is_surv$alpha_star)+
       facet_wrap(name~.,ncol=1,scales="free_y")+
-      labs(title=paste0("Diagnostics - ",dist))
+      labs(title=paste0("Diagnostics - ",distributions[dist]))
     
     print(g)
-  
+    
+    cat('\n\n') 
+  outplots[["diagnostics"]]<-g
   
   }
   
@@ -343,10 +348,13 @@ is_surv_viz_gg <- function(is_surv, times=tseq2,
     
     g2<-ggpairs(df, aes(colour = Method, alpha = 0.4),
                   columns = 1:(ncol(df)-1),
-                  title=paste0("Parameters - ",dist))
+                  title=paste0("Parameters - ",distributions[dist]))
     
     print(g2)
 
+    cat('\n\n') 
+    
+    outplots[["parameters"]]<-g2
   }
   
 
@@ -381,14 +389,16 @@ is_surv_viz_gg <- function(is_surv, times=tseq2,
                    aes(x=tst,xend=tst,y=lower,yend=upper),
                    colour="black",
                    lwd=1)+
-      labs(y="S(t)",x="time (t)",title=paste0("Survival - ",dist))
+      labs(y="S(t)",x="time (t)",title=paste0("Survival - ",distributions[dist]))
     
     print(g3)
     
- 
+    cat('\n\n') 
+    
+    outplots[["survival"]]<-g3
     }
   
- # return(invisible(Smat))
+  return(outplots)
 }
 
 ## Additional functions added by DMC
