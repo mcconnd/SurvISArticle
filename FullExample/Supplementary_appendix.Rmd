@@ -3,7 +3,9 @@ title: "Survival extrapolation - Supplementary Appendix"
 author: "NCPE"
 date: "October 2024"
 geometry: margin=2cm
-output: pdf_document
+output: 
+    pdf_document:
+      extra_dependencies: ["float"]
 ---
 
 ```{r setup, include=FALSE}
@@ -31,7 +33,10 @@ knitr::opts_chunk$set(echo = FALSE,
                       cache=TRUE,
                       tidy=TRUE,
                       dev = 'png',
-                      tidy.opts=list(width.cutoff=60)
+                      tidy.opts=list(width.cutoff=60),
+                      fig.pos = "H", 
+                      out.extra = "",
+                      latex_options = "HOLD_position"
                       )
 
 # Do this next time you run the models
@@ -92,40 +97,52 @@ ggsave(file=paste0("./output/",dist,"_",i,".png"),plot=plots[[i]])
 ```
 
 
-```{r allplots, results='asis',fig.cap=captions, dpi=300}
+```{r allplots, results='asis',fig.cap=captions, dpi=300, fig.height=4, fig.width=6}
 
 for (dist in dists)
 {
-  print(knitr::kable(is.models[[dist]][["orig"]]$coefficients,caption=paste0("Parameter estimates obtained via MLE: ",distributions[dist])))
-  
-  cat('\n\n') 
-  
-  print(knitr::kable(is.models[[dist]][["orig"]]$cov,caption=paste0("Covariance matrix obtained via MLE: ",distributions[dist])))
-  
-  cat('\n\n') 
 
-  print(knitr::kable(is.models[[dist]]$post_mean,caption=paste0("Parameter estimates obtained via Importance Sampling: ",distributions[dist])))
+    print(knitr::kable(
+      list(is.models[[dist]][["orig"]]$coefficients,is.models[[dist]]$post_mean),
+      caption=paste0("Parameter estimates obtained using trial data only (left) and combining trial data with external information (right): ",distributions[dist]," distribution.")))
+
+  
+    #print(knitr::kable(is.models[[dist]][["orig"]]$coefficients,caption=paste0("Parameter estimates obtained via MLE: ",distributions[dist])))
+  
+  #cat('\n\n') 
+  
+  #print(knitr::kable(is.models[[dist]][["orig"]]$cov,caption=paste0("Covariance matrix obtained via MLE: ",distributions[dist])))
+  
+  #cat('\n\n') 
+
+  #print(knitr::kable(is.models[[dist]]$post_mean,caption=paste0("Parameter estimates obtained via Importance Sampling: ",distributions[dist])))
   
   cat('\n\n') 
   
-  print(knitr::kable(is.models[[dist]]$post_cov,caption=paste0("Covariance matrix obtained via Importance Sampling: ",distributions[dist])))
+  #print(knitr::kable(is.models[[dist]]$post_cov,caption=paste0("Covariance matrix obtained via Importance Sampling: ",distributions[dist])))
   
-
+  print(knitr::kable(
+    list(is.models[[dist]]$post_cov,is.models[[dist]][["orig"]]$cov),
+    caption=paste0("Covariance matrices obtained using trial data only (left) and combining trial data with external information (right): ",distributions[dist], " distribution.")))
+  
+cat('\n\n') 
   #plots<-is_surv_viz_gg(is.models[[dist]],tseq2,tstar,what=1:3,dist=dist)
   
   plots<-readRDS(paste0("./output/plots_",dist))
   
-  print(plots[[1]])
+  
+  
+  print(plots[[1]]+labs(title=NULL))
   
   cat('\n\n') 
   
-  print(plots[[2]])
+  print(plots[[2]]+labs(title=NULL))
   
   cat('\n\n') 
   
-  print(plots[[3]])
+  print(plots[[3]]+labs(title=NULL))
   
-  cat('\n\n') 
+  cat('\\newpage') 
 }
 
 
@@ -134,8 +151,8 @@ for (dist in dists)
 
 
 
-```{r}
-knitr::knit_exit()
+```{r, cache=F}
+#knitr::knit_exit()
 ```
 
 ## Parameter variability
@@ -178,7 +195,7 @@ captions5<-c(paste0("Survival curve parameter distributions and covariance estim
 ## Plots of survival curves over time
 
 
-Comparisons of survival curves (median and 95% confidence/credible intervals) obtained from the importance sampling method described in the paper, with those obtained from the fully Bayesian approach of Cooney & Whilte implemented in the expertsurv package.
+Comparisons of survival curves (median and 95% confidence/credible intervals) obtained from the importance sampling method described in the paper, with those obtained from the fully Bayesian approach of Cooney & White implemented in the expertsurv package.
 
 
 ```{r expersurvIS, results='asis',fig.cap=captions4, dpi=300}
@@ -231,7 +248,7 @@ cat('\n\n')
 
 Area under the curve measures mean survival extrapolated over a lifetime (in these examples survival is capped at 100 years since some curves plateau).
 
-```{r AUC,  results='asis', fig.cap="Density plots comparing probabilistic total area under the curve (mean OS) distributions obtained from combining trial data with external information using the importance sampling (IS) method described in the paper, with those obtained from the fully Bayesian method of Cooney & White implemented in the expertsurv package. "}
+```{r AUC,  results='asis', fig.cap="Density plots comparing probabilistic total area under the curve (mean OS) distributions obtained from combining trial data with external information using the importance sampling (IS) method described in the paper, with those obtained from the fully Bayesian method of Cooney and White implemented in the expertsurv package. "}
 
 cat('\n\n') 
 
@@ -280,7 +297,7 @@ auc.print2 <- auc.summary2 %>%
   select(Distribution,expertsurv,IS,Mean.Diff=mean_diff,Var.Ratio) 
 
 knitr::kable(auc.print2,
-             caption = "Comparison of probabilistic total area under the curve (mean lifetime OS) estimates, obtained from combining trial data with external information using the importance sampling (IS) method described in the paper, and with the fully Bayesian method of Cooney & White implemented in the expertsurv package. Values shown are probabilstic mean and 95% confidence/credible intervals.")
+             caption = "Comparison of probabilistic total area under the curve (mean lifetime OS) estimates, obtained from combining trial data with external information using the importance sampling (IS) method described in the paper, and with the fully Bayesian method of Cooney and White implemented in the expertsurv package. Values shown are probabilstic mean and 95% confidence/credible intervals.")
 
 # AUC density plot
 # No truncation of AUC values but truncation of graph
@@ -310,7 +327,7 @@ cat('\n\n')
 Given that the external information concerns OS at 5 years, we compare estimates of 5-year OS obtained from the two methods.
 
 
-```{r ststar,  results='asis', fig.cap = "Density plots comparing 5-year OS estimates, obtained from combining trial data with external information using the importance sampling (IS) method described in the paper, with those obtained from the fully Bayesian method of Cooney & White implemented in the expertsurv package."}
+```{r ststar,  results='asis', fig.cap = "Density plots comparing 5-year OS estimates, obtained from combining trial data with external information using the importance sampling (IS) method described in the paper, with those obtained from the fully Bayesian method of Cooney and White implemented in the expertsurv package."}
 library(scales)
 
 surv.tstar2<-data.frame()
@@ -340,7 +357,7 @@ surv.tstar.summary2<-surv.tstar.long2 %>%
 cat('\n\n') 
 
 knitr::kable(surv.tstar.summary2,
-             caption = "Comparison of 5-year OS estimates, obtained from combining trial data with external information using the importance sampling (IS) method described in the paper, with the fully Bayesian method of Cooney & White implemented in the expertsurv package.")
+             caption = "Comparison of 5-year OS estimates, obtained from combining trial data with external information using the importance sampling (IS) method described in the paper, with the fully Bayesian method of Cooney and White implemented in the expertsurv package.")
 
 g.ststar2<-ggplot(data=surv.tstar.long2,aes(x=S.tstar,y=Distribution,colour=Output,fill=Output))+
   geom_density_ridges(alpha=0.5,scale=1)+
