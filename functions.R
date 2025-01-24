@@ -88,6 +88,14 @@ for(d in sdists)
 dists<-c("exponential","weibull","gompertz","lognormal",
          "llogis","gengamma")
 
+# Full names of distributions (named vector) for printing
+distributions<-c("exponential"="Exponential",
+                 "weibull"="Weibull",
+                 "lognormal"="Log-normal",
+                 "llogis"="Log-logistic",
+                 "gompertz"="Gompertz",
+                 "gengamma"="Gen. Gamma")
+
 names(inv_transforms)<-dists
 names(transforms)<-dists
 names(d_funs)<-dists
