@@ -49,7 +49,7 @@ The tables and figures in this section show survival curve parameter estimates, 
 
 ```{r captions}
 
-captions1<-c(paste0("Importance sampling diagnostics: coefficient of variation (COV) and effective sample size (ESS) as functions of the tempering parameter alpha, ",distributions," distribution. The vertical line shows the optimal value of alpha identified by the algorithm."))
+captions1<-c(paste0("Effective sample size (ESS), corresponding to 5000 (weighted) parameter samples, plotted as a function of the tempering parameter alpha, for the ",distributions," distribution. The vertical line shows the optimal value of alpha identified by the algorithm."))
 captions2<-c(paste0("Survival curve parameter distributions and covariance estimates obtained using trial data only (MLE) and combining trial data with external information  (IS), ",distributions," distribution"))
 captions3<-c(paste0("Survival curves (median and 95% confidence intervals) obtained using trial data only (MLE) and combining trial data with external information (IS), ",distributions," distribution"))
 

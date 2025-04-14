@@ -321,17 +321,17 @@ is_surv_viz_gg <- function(is_surv, times=tseq2,
   if(ind[1]) {
     
     df<-data.frame("alpha"=is_surv$alpha_vec,
-                   "COV"=is_surv$ESS_mat[,1],
-                   "ESS1"=is_surv$ESS_mat[,2],
-                   "ESS2"=is_surv$ESS_mat[,3]
-                   ) %>%
-      pivot_longer(cols=2:4)
+                   #"COV"=is_surv$ESS_mat[,1],
+                   "ESS"=is_surv$ESS_mat[,2]#,
+                   #"ESS2"=is_surv$ESS_mat[,3]
+                   ) #%>%
+     # pivot_longer(cols=2:4)
     
-    g<-ggplot(data=df,aes(x=alpha,y=value))+
+    g<-ggplot(data=df,aes(x=alpha,y=ESS))+
       geom_line()+
       geom_vline(xintercept=is_surv$alpha_star)+
-      facet_wrap(name~.,ncol=1,scales="free_y")+
-      labs(title=paste0("Diagnostics - ",distributions[dist]))
+      #facet_wrap(name~.,ncol=1,scales="free_y")+
+      labs(title=paste0("Effective sample size - ",distributions[dist]))
     
     print(g)
     

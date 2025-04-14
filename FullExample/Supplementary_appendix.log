@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.5.15)  24 JAN 2025 15:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.5.15)  14 APR 2025 14:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -598,195 +598,195 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 \tf@toc=\write4
 \openout4 = `Supplementary_appendix.toc'.
 
-<Supplementary_appendix_files/figure-latex/allplots-1.pdf, id=34, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-1.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-1.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-1.pdf  used on input line 150.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<Supplementary_appendix_files/figure-latex/allplots-1.png, id=34, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-1.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-1.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-1.png  used on input line 150.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
 [1
 
 {c:/Users/mcconnd1/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/Users/mcconnd1/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}]
-<Supplementary_appendix_files/figure-latex/allplots-2.pdf, id=48, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-2.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-2.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-2.pdf  used on input line 154.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[2 <./Supplementary_appendix_files/figure-latex/allplots-1.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-3.pdf, id=60, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-3.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-3.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-3.pdf  used on input line 158.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[3 <./Supplementary_appendix_files/figure-latex/allplots-2.pdf>] [4 <./Supplementary_appendix_files/figure-latex/allplots-3.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-4.pdf, id=88, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-4.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-4.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-4.pdf  used on input line 211.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<Supplementary_appendix_files/figure-latex/allplots-5.pdf, id=89, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-5.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-5.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-5.pdf  used on input line 215.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[5 <./Supplementary_appendix_files/figure-latex/allplots-4.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-6.pdf, id=102, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-6.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-6.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-6.pdf  used on input line 219.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[6 <./Supplementary_appendix_files/figure-latex/allplots-5.pdf>] [7 <./Supplementary_appendix_files/figure-latex/allplots-6.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-7.pdf, id=131, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-7.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-7.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-7.pdf  used on input line 272.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<Supplementary_appendix_files/figure-latex/allplots-8.pdf, id=132, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-8.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-8.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-8.pdf  used on input line 276.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[8 <./Supplementary_appendix_files/figure-latex/allplots-7.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-9.pdf, id=146, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-9.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-9.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-9.pdf  used on input line 280.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[9 <./Supplementary_appendix_files/figure-latex/allplots-8.pdf>] [10 <./Supplementary_appendix_files/figure-latex/allplots-9.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-10.pdf, id=174, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-10.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-10.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-10.pdf  used on input line 333.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<Supplementary_appendix_files/figure-latex/allplots-11.pdf, id=175, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-11.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-11.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-11.pdf  used on input line 337.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[11 <./Supplementary_appendix_files/figure-latex/allplots-10.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-12.pdf, id=188, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-12.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-12.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-12.pdf  used on input line 341.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[12 <./Supplementary_appendix_files/figure-latex/allplots-11.pdf>] [13 <./Supplementary_appendix_files/figure-latex/allplots-12.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-13.pdf, id=217, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-13.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-13.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-13.pdf  used on input line 394.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<Supplementary_appendix_files/figure-latex/allplots-14.pdf, id=218, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-14.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-14.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-14.pdf  used on input line 398.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[14 <./Supplementary_appendix_files/figure-latex/allplots-13.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-15.pdf, id=231, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-15.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-15.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-15.pdf  used on input line 402.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[15 <./Supplementary_appendix_files/figure-latex/allplots-14.pdf>] [16 <./Supplementary_appendix_files/figure-latex/allplots-15.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-16.pdf, id=259, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-16.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-16.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-16.pdf  used on input line 463.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<Supplementary_appendix_files/figure-latex/allplots-17.pdf, id=260, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-17.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-17.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-17.pdf  used on input line 467.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[17 <./Supplementary_appendix_files/figure-latex/allplots-16.pdf>]
-<Supplementary_appendix_files/figure-latex/allplots-18.pdf, id=274, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/allplots-18.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/allplots-18.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-18.pdf  used on input line 471.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[18 <./Supplementary_appendix_files/figure-latex/allplots-17.pdf>] [19 <./Supplementary_appendix_files/figure-latex/allplots-18.pdf>]
-<Supplementary_appendix_files/figure-latex/expertsurvIS-1.png, id=309, 469.755pt x 325.215pt>
+<Supplementary_appendix_files/figure-latex/allplots-2.png, id=48, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-2.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-2.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-2.png  used on input line 154.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[2 <./Supplementary_appendix_files/figure-latex/allplots-1.png>]
+<Supplementary_appendix_files/figure-latex/allplots-3.png, id=56, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-3.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-3.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-3.png  used on input line 158.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[3 <./Supplementary_appendix_files/figure-latex/allplots-2.png> <./Supplementary_appendix_files/figure-latex/allplots-3.png>]
+<Supplementary_appendix_files/figure-latex/allplots-4.png, id=65, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-4.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-4.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-4.png  used on input line 211.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+<Supplementary_appendix_files/figure-latex/allplots-5.png, id=66, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-5.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-5.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-5.png  used on input line 215.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[4 <./Supplementary_appendix_files/figure-latex/allplots-4.png>]
+<Supplementary_appendix_files/figure-latex/allplots-6.png, id=75, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-6.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-6.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-6.png  used on input line 219.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[5 <./Supplementary_appendix_files/figure-latex/allplots-5.png (PNG copy)> <./Supplementary_appendix_files/figure-latex/allplots-6.png>]
+<Supplementary_appendix_files/figure-latex/allplots-7.png, id=83, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-7.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-7.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-7.png  used on input line 272.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+<Supplementary_appendix_files/figure-latex/allplots-8.png, id=84, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-8.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-8.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-8.png  used on input line 276.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[6 <./Supplementary_appendix_files/figure-latex/allplots-7.png>]
+<Supplementary_appendix_files/figure-latex/allplots-9.png, id=93, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-9.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-9.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-9.png  used on input line 280.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[7 <./Supplementary_appendix_files/figure-latex/allplots-8.png (PNG copy)> <./Supplementary_appendix_files/figure-latex/allplots-9.png>]
+<Supplementary_appendix_files/figure-latex/allplots-10.png, id=102, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-10.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-10.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-10.png  used on input line 333.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+<Supplementary_appendix_files/figure-latex/allplots-11.png, id=103, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-11.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-11.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-11.png  used on input line 337.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[8 <./Supplementary_appendix_files/figure-latex/allplots-10.png>]
+<Supplementary_appendix_files/figure-latex/allplots-12.png, id=112, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-12.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-12.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-12.png  used on input line 341.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[9 <./Supplementary_appendix_files/figure-latex/allplots-11.png (PNG copy)> <./Supplementary_appendix_files/figure-latex/allplots-12.png>]
+<Supplementary_appendix_files/figure-latex/allplots-13.png, id=120, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-13.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-13.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-13.png  used on input line 394.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+<Supplementary_appendix_files/figure-latex/allplots-14.png, id=121, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-14.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-14.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-14.png  used on input line 398.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[10 <./Supplementary_appendix_files/figure-latex/allplots-13.png>]
+<Supplementary_appendix_files/figure-latex/allplots-15.png, id=130, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-15.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-15.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-15.png  used on input line 402.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[11 <./Supplementary_appendix_files/figure-latex/allplots-14.png (PNG copy)> <./Supplementary_appendix_files/figure-latex/allplots-15.png>]
+<Supplementary_appendix_files/figure-latex/allplots-16.png, id=138, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-16.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-16.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-16.png  used on input line 463.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+<Supplementary_appendix_files/figure-latex/allplots-17.png, id=139, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-17.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-17.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-17.png  used on input line 467.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[12 <./Supplementary_appendix_files/figure-latex/allplots-16.png>]
+<Supplementary_appendix_files/figure-latex/allplots-18.png, id=148, 433.62pt x 289.08pt>
+File: Supplementary_appendix_files/figure-latex/allplots-18.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/allplots-18.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/allplots-18.png  used on input line 471.
+(pdftex.def)             Requested size: 433.63878pt x 289.09251pt.
+[13 <./Supplementary_appendix_files/figure-latex/allplots-17.png (PNG copy)> <./Supplementary_appendix_files/figure-latex/allplots-18.png>]
+<Supplementary_appendix_files/figure-latex/expertsurvIS-1.png, id=163, 469.755pt x 325.215pt>
 File: Supplementary_appendix_files/figure-latex/expertsurvIS-1.png Graphic file (type png)
 <use Supplementary_appendix_files/figure-latex/expertsurvIS-1.png>
 Package pdftex.def Info: Supplementary_appendix_files/figure-latex/expertsurvIS-1.png  used on input line 510.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[20]
-<Supplementary_appendix_files/figure-latex/expertsurvIS-2.png, id=322, 469.755pt x 325.215pt>
+[14]
+<Supplementary_appendix_files/figure-latex/expertsurvIS-2.png, id=177, 469.755pt x 325.215pt>
 File: Supplementary_appendix_files/figure-latex/expertsurvIS-2.png Graphic file (type png)
 <use Supplementary_appendix_files/figure-latex/expertsurvIS-2.png>
 Package pdftex.def Info: Supplementary_appendix_files/figure-latex/expertsurvIS-2.png  used on input line 514.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[21 <./Supplementary_appendix_files/figure-latex/expertsurvIS-1.png>]
-<Supplementary_appendix_files/figure-latex/expertsurvIS-3.png, id=328, 469.755pt x 325.215pt>
+[15 <./Supplementary_appendix_files/figure-latex/expertsurvIS-1.png>]
+<Supplementary_appendix_files/figure-latex/expertsurvIS-3.png, id=183, 469.755pt x 325.215pt>
 File: Supplementary_appendix_files/figure-latex/expertsurvIS-3.png Graphic file (type png)
 <use Supplementary_appendix_files/figure-latex/expertsurvIS-3.png>
 Package pdftex.def Info: Supplementary_appendix_files/figure-latex/expertsurvIS-3.png  used on input line 518.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[22 <./Supplementary_appendix_files/figure-latex/expertsurvIS-2.png>]
-<Supplementary_appendix_files/figure-latex/expertsurvIS-4.png, id=335, 469.755pt x 325.215pt>
+[16 <./Supplementary_appendix_files/figure-latex/expertsurvIS-2.png>]
+<Supplementary_appendix_files/figure-latex/expertsurvIS-4.png, id=190, 469.755pt x 325.215pt>
 File: Supplementary_appendix_files/figure-latex/expertsurvIS-4.png Graphic file (type png)
 <use Supplementary_appendix_files/figure-latex/expertsurvIS-4.png>
 Package pdftex.def Info: Supplementary_appendix_files/figure-latex/expertsurvIS-4.png  used on input line 522.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[23 <./Supplementary_appendix_files/figure-latex/expertsurvIS-3.png>]
-<Supplementary_appendix_files/figure-latex/expertsurvIS-5.png, id=342, 469.755pt x 325.215pt>
+[17 <./Supplementary_appendix_files/figure-latex/expertsurvIS-3.png>]
+<Supplementary_appendix_files/figure-latex/expertsurvIS-5.png, id=197, 469.755pt x 325.215pt>
 File: Supplementary_appendix_files/figure-latex/expertsurvIS-5.png Graphic file (type png)
 <use Supplementary_appendix_files/figure-latex/expertsurvIS-5.png>
 Package pdftex.def Info: Supplementary_appendix_files/figure-latex/expertsurvIS-5.png  used on input line 526.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[24 <./Supplementary_appendix_files/figure-latex/expertsurvIS-4.png>]
-<Supplementary_appendix_files/figure-latex/expertsurvIS-6.png, id=348, 469.755pt x 325.215pt>
+[18 <./Supplementary_appendix_files/figure-latex/expertsurvIS-4.png>]
+<Supplementary_appendix_files/figure-latex/expertsurvIS-6.png, id=203, 469.755pt x 325.215pt>
 File: Supplementary_appendix_files/figure-latex/expertsurvIS-6.png Graphic file (type png)
 <use Supplementary_appendix_files/figure-latex/expertsurvIS-6.png>
 Package pdftex.def Info: Supplementary_appendix_files/figure-latex/expertsurvIS-6.png  used on input line 530.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[25 <./Supplementary_appendix_files/figure-latex/expertsurvIS-5.png>]
-<Supplementary_appendix_files/figure-latex/plotparams-1.pdf, id=360, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/plotparams-1.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/plotparams-1.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-1.pdf  used on input line 539.
+[19 <./Supplementary_appendix_files/figure-latex/expertsurvIS-5.png>]
+<Supplementary_appendix_files/figure-latex/plotparams-1.png, id=215, 469.755pt x 325.215pt>
+File: Supplementary_appendix_files/figure-latex/plotparams-1.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/plotparams-1.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-1.png  used on input line 539.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[26 <./Supplementary_appendix_files/figure-latex/expertsurvIS-6.png>]
-<Supplementary_appendix_files/figure-latex/plotparams-2.pdf, id=371, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/plotparams-2.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/plotparams-2.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-2.pdf  used on input line 543.
+[20 <./Supplementary_appendix_files/figure-latex/expertsurvIS-6.png>]
+<Supplementary_appendix_files/figure-latex/plotparams-2.png, id=226, 469.755pt x 325.215pt>
+File: Supplementary_appendix_files/figure-latex/plotparams-2.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/plotparams-2.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-2.png  used on input line 543.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[27 <./Supplementary_appendix_files/figure-latex/plotparams-1.pdf>]
-<Supplementary_appendix_files/figure-latex/plotparams-3.pdf, id=384, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/plotparams-3.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/plotparams-3.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-3.pdf  used on input line 547.
+[21 <./Supplementary_appendix_files/figure-latex/plotparams-1.png>]
+<Supplementary_appendix_files/figure-latex/plotparams-3.png, id=232, 469.755pt x 325.215pt>
+File: Supplementary_appendix_files/figure-latex/plotparams-3.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/plotparams-3.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-3.png  used on input line 547.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[28 <./Supplementary_appendix_files/figure-latex/plotparams-2.pdf>]
-<Supplementary_appendix_files/figure-latex/plotparams-4.pdf, id=399, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/plotparams-4.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/plotparams-4.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-4.pdf  used on input line 551.
+[22 <./Supplementary_appendix_files/figure-latex/plotparams-2.png (PNG copy)>]
+<Supplementary_appendix_files/figure-latex/plotparams-4.png, id=238, 469.755pt x 325.215pt>
+File: Supplementary_appendix_files/figure-latex/plotparams-4.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/plotparams-4.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-4.png  used on input line 551.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[29 <./Supplementary_appendix_files/figure-latex/plotparams-3.pdf>]
-<Supplementary_appendix_files/figure-latex/plotparams-5.pdf, id=415, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/plotparams-5.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/plotparams-5.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-5.pdf  used on input line 555.
+[23 <./Supplementary_appendix_files/figure-latex/plotparams-3.png (PNG copy)>]
+<Supplementary_appendix_files/figure-latex/plotparams-5.png, id=244, 469.755pt x 325.215pt>
+File: Supplementary_appendix_files/figure-latex/plotparams-5.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/plotparams-5.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-5.png  used on input line 555.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[30 <./Supplementary_appendix_files/figure-latex/plotparams-4.pdf>]
-<Supplementary_appendix_files/figure-latex/plotparams-6.pdf, id=429, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/plotparams-6.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/plotparams-6.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-6.pdf  used on input line 559.
+[24 <./Supplementary_appendix_files/figure-latex/plotparams-4.png (PNG copy)>]
+<Supplementary_appendix_files/figure-latex/plotparams-6.png, id=249, 469.755pt x 325.215pt>
+File: Supplementary_appendix_files/figure-latex/plotparams-6.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/plotparams-6.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/plotparams-6.png  used on input line 559.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[31 <./Supplementary_appendix_files/figure-latex/plotparams-5.pdf>]
-<Supplementary_appendix_files/figure-latex/AUC-1.pdf, id=447, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/AUC-1.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/AUC-1.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/AUC-1.pdf  used on input line 591.
+[25 <./Supplementary_appendix_files/figure-latex/plotparams-5.png (PNG copy)>]
+<Supplementary_appendix_files/figure-latex/AUC-1.png, id=258, 469.755pt x 325.215pt>
+File: Supplementary_appendix_files/figure-latex/AUC-1.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/AUC-1.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/AUC-1.png  used on input line 591.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[32 <./Supplementary_appendix_files/figure-latex/plotparams-6.pdf>]
-<Supplementary_appendix_files/figure-latex/ststar-1.pdf, id=466, 469.755pt x 325.215pt>
-File: Supplementary_appendix_files/figure-latex/ststar-1.pdf Graphic file (type pdf)
-<use Supplementary_appendix_files/figure-latex/ststar-1.pdf>
-Package pdftex.def Info: Supplementary_appendix_files/figure-latex/ststar-1.pdf  used on input line 635.
+[26 <./Supplementary_appendix_files/figure-latex/plotparams-6.png (PNG copy)>]
+<Supplementary_appendix_files/figure-latex/ststar-1.png, id=268, 469.755pt x 325.215pt>
+File: Supplementary_appendix_files/figure-latex/ststar-1.png Graphic file (type png)
+<use Supplementary_appendix_files/figure-latex/ststar-1.png>
+Package pdftex.def Info: Supplementary_appendix_files/figure-latex/ststar-1.png  used on input line 635.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[33 <./Supplementary_appendix_files/figure-latex/AUC-1.pdf>] [34 <./Supplementary_appendix_files/figure-latex/ststar-1.pdf>] (./Supplementary_appendix.aux)
+[27 <./Supplementary_appendix_files/figure-latex/AUC-1.png>] [28 <./Supplementary_appendix_files/figure-latex/ststar-1.png>] (./Supplementary_appendix.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -794,18 +794,18 @@ Package rerunfilecheck Info: File `Supplementary_appendix.out' has not changed.
 (rerunfilecheck)             Checksum: E770CE6A75C0A0AB571BEF937B8E9ACE;1538.
  ) 
 Here is how much of TeX's memory you used:
- 13207 strings out of 478006
- 225571 string characters out of 5837505
+ 13253 strings out of 478006
+ 228157 string characters out of 5837505
  1863993 words of memory out of 5000000
- 33012 multiletter control sequences out of 15000+600000
+ 33064 multiletter control sequences out of 15000+600000
  558441 words of font info for 72 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,9n,76p,562b,439s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/mcconnd1/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/mcconnd1/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/mcconnd1/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/mcconnd1/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/mcconnd1/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb>
-Output written on Supplementary_appendix.pdf (34 pages, 11105181 bytes).
+Output written on Supplementary_appendix.pdf (28 pages, 2138695 bytes).
 PDF statistics:
- 542 PDF objects out of 1000 (max. 8388607)
- 427 compressed objects within 5 object streams
- 97 named destinations out of 1000 (max. 500000)
+ 329 PDF objects out of 1000 (max. 8388607)
+ 232 compressed objects within 3 object streams
+ 91 named destinations out of 1000 (max. 500000)
  209 words of extra memory for PDF output out of 10000 (max. 10000000)
 
