@@ -2,7 +2,7 @@ Survival Extrapolation Incorporating External Information Using
 Importance Sampling
 ================
 NCPE
-2024-05-30
+2025-07-01
 
 ## Basic Usage
 
@@ -23,7 +23,7 @@ third party).
 For this example we have provided the object ‘mle.params.RDS’ which
 contains a list with summary parmeter estimates and covariance matrices
 for the six standard parametric survival models fit to data from the
-KEYNOTE-XXX study, shown in the figure below.
+KEYNOTE-426 study, shown in the figure below.
 
 ![](plots_mle.png)
 
