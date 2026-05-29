@@ -91,7 +91,7 @@ evidence in this case.
 ## Use of the method to obtained adjusted survival predictions
 
 All of the required code is included in `functions.R`; . From a user’s
-point of view, the important one is `expert_surv`, which takes the
+point of view, the important one is `is_surv`, which takes the
 original fitted curves and external evidence as input, implements the
 importance sampling algorithm, and returns the parameters and covariance
 matrix of the ‘adjusted’ survival curves as output.
@@ -190,7 +190,7 @@ fit$post_cov
     ## scale -0.011809346  0.02341346
 
 However, it is probably a good idea to examine the output before doing
-this. To do this we have provided the function `expert_surv_viz_gg`
+this. To do this we have provided the function `is_surv_viz_gg`
 which produces three output plots:
 
 1.  Importance sampling diagnostics (see \[ref\] for interpretation of
@@ -255,7 +255,7 @@ fit2<-is_surv(
 
 ``` r
 is_surv_viz_gg(
-  fit2, # expert_surv object
+  fit2, # is_surv object
   times = seq(0, 12*20, len = 1e4),# Grid of timepoints for plotting. Here we want to plot 20 years using a grid of 1e4 points
   #tstar=tstar,
   dist="weibull" # Name of distribution
