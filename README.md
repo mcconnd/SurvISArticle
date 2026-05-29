@@ -1,4 +1,4 @@
-The sansIPD method for incorporating external information in survival extrapolation
+The sansIPD method for incorporating external evidence in survival extrapolation
 ================
 NCPE
 2026-04-22
@@ -63,7 +63,7 @@ weib.coeff<-mle.params[["weibull"]][["coeff"]]
 weib.cov<-mle.params[["weibull"]][["cov"]]
 ```
 
-### External information on expected survival at a future timepoint
+### External evidence on expected survival at a future timepoint
 
 The second input required by the model is information on expected
 survival at one or more future timepoints, formulated as a probability
@@ -86,13 +86,13 @@ sigma_t <- (upper_prob - mu_t) / (1.96)
 ```
 
 The variables `tstar`, `mu_t` and `sigma_t` fully encode our external
-information in this case.
+evidence in this case.
 
 ## Use of the method to obtained adjusted survival predictions
 
 All of the required code is included in `functions.R`; . From a user’s
 point of view, the important one is `expert_surv`, which takes the
-original fitted curves and external information as input, implements the
+original fitted curves and external evidence as input, implements the
 importance sampling algorithm, and returns the parameters and covariance
 matrix of the ‘adjusted’ survival curves as output.
 
@@ -111,9 +111,9 @@ Before using `is_surv` we need to specify `ex_info` in the correct
 format. This should be a named list containing:
 
 - `tstar` numeric specifying the timepoint(s) at which external
-  information is to be used
+  evidence is to be used
 
-- `loss` the log-density function(s) encoding the external information.
+- `loss` the log-density function(s) encoding the external evidence.
 
   - For a single timepoint this should be specified as
     e.g. `loss=function(x)...`
@@ -127,10 +127,10 @@ format. This should be a named list containing:
   confidence intervals of the density functions (only required for
   plotting)
 
-In our example, we specify the external information as follows:
+In our example, we specify the external evidence as follows:
 
 ``` r
-# External Information
+# External evidence
 ex.info<-list("tstar"=tstar,
                   "loss"=function(x){dnorm(x,mean=mu_t,sd=sigma_t,log=TRUE)},
                   "lower.probs"=lower_prob,
@@ -166,7 +166,7 @@ The output of `is_surv`contains the following:
 
 - `orig`: original parameter estimates and covariance matrix (list)
 
-- `ex_info`: external information used to fit the model
+- `ex_info`: external evidence used to fit the model
 
 - `alpha_star,  iter_star,  ESS_mat,  alpha_vec` : importance samping
   diagnostics
@@ -197,10 +197,10 @@ which produces three output plots:
     these)
 
 2.  Plots of parameter estimates both with and without adjustment to
-    incorporate external information
+    incorporate external evidence
 
 3.  Plots of survival curves both with and without adjustment to
-    incorporate external information (including confidence intervals
+    incorporate external evidence (including confidence intervals
     based on simulations, and confidence intervals of the prior
     distribution)
 

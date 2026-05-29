@@ -66,7 +66,7 @@ outplot<-ggplot(data=is.compare.df,aes(x=time,y=OS,colour=Distribution))+
   geom_line(lwd=1,alpha=0.8)+
   facet_wrap(.~factor(Method,
                       levels=c("MLE","IS"),
-                      labels=c("Trial data only","Trial data with external information")),
+                      labels=c("Trial data only","Trial data with external evidence")),
              nrow=2)+
   geom_segment(x=60,xend=60,y=mu_t-1.96*sigma_t,yend=mu_t+1.96*sigma_t,lwd=1,colour="grey40")+
   geom_segment(x=59,xend=61,y=mu_t-1.96*sigma_t,yend=mu_t-1.96*sigma_t,lwd=1,colour="grey40")+
