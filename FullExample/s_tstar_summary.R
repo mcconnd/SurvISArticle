@@ -14,8 +14,8 @@ for (dist in dists)
 
 surv.tstar.long<-pivot_longer(surv.tstar,cols=1:3,values_to = "S.tstar") %>%
   mutate(Output=factor(name,levels=c("Prior","IS","MLE"),
-                       labels=c("External evidence",
-                                "Trial data with external evidence",
+                       labels=c("External information",
+                                "Trial data with external information",
                                 "Trial data only")),
          Distribution=str_replace_all(dist,distributions),
          # Edit 20260107 - crude measure of 'agreement' with prior

@@ -1,5 +1,5 @@
 ---
-title: "Supplementary Appendix 3"
+title: "Supplementary Appendix 4"
 geometry: margin=2cm
 output: 
   bookdown::pdf_document2:
@@ -47,8 +47,8 @@ source("run_all.R")
 ```{r captions}
 
 captions1<-c(paste0("Effective sample size (ESS), corresponding to 5000 (weighted) parameter samples, plotted as a function of the tempering parameter alpha, for the ",distributions," distribution. The vertical line shows the optimal value of alpha identified by the algorithm."))
-captions2<-c(paste0("Survival curve parameter distributions and covariance estimates obtained using trial data only and combining trial data with external evidence, ",distributions," distribution."))
-captions3<-c(paste0("Survival curves (median and 95% confidence intervals) obtained using trial data only and combining trial data with external evidence, ",distributions," distribution. Vertical bar indicates 95% probability interval for 5 year OS based on external evidence."))
+captions2<-c(paste0("Survival curve parameter distributions and covariance estimates obtained using trial data only and combining trial data with external information, ",distributions," distribution."))
+captions3<-c(paste0("Survival curves (median and 95% confidence intervals) obtained using trial data only and combining trial data with external information, ",distributions," distribution. Vertical bar indicates 95% probability interval for 5 year OS based on external information."))
 
 captions<-character(0)
 
@@ -88,7 +88,7 @@ if(!file.exists(paste0("./output/plots_",dist))){
 
 
 
-The below plots show the estimated survival curves (pointwise probabilistic median and 95% confidence intervals) obtained using trial data only and combining trial data with external evidence, for the survival distributions under consideration. Vertical bars indicate the 95% probability interval for 5 year OS based on external evidence.
+The below plots show the estimated survival curves (pointwise probabilistic median and 95% confidence intervals) obtained using trial data only and combining trial data with external information, for the survival distributions under consideration. Vertical bars indicate the 95% probability interval for 5 year OS based on external information.
                                                     
 ```{r survplots, fig.cap=captions3, dpi=300, fig.height=3.5, fig.width=7}
 
@@ -139,7 +139,7 @@ for(dist in dists)
 surv.s10s20.long<-pivot_longer(surv.s10s20,cols=1:2,values_to = "S.tstar") %>%
   mutate(Distribution=str_replace_all(distribution,distributions),
          Timepoint=str_replace_all(name,c("S.10"="10 years","S.20"="20 years")),
-         Output=str_replace_all(method,c("MLE"="Trial data only","IS"="Trial data with external evidence")))
+         Output=str_replace_all(method,c("MLE"="Trial data only","IS"="Trial data with external information")))
 
 
 ###
@@ -168,7 +168,7 @@ surv.s10s20.summary<-surv.s10s20.long %>%
 
 
 kbl(surv.s10s20.summary,
-    caption = "Summary of probabilistic distributions of 10- and 20-year OS, estimated using Trial Data Only via MLE, and combining Trial Data with external evidence via the sansIPD (importance sampling) method",
+    caption = "Summary of probabilistic distributions of 10- and 20-year OS, estimated using Trial Data Only via MLE, and combining Trial Data with external information via the sansIPD (importance sampling) method",
     col.names = c("Distribution", "Timepoint", rep(c("Mean","Median","95% CrI"),2),"Mean Diff.","Var. Ratio"),
     booktabs=T) %>%
   kable_styling(latex_options = c("HOLD_position","striped")) %>%
@@ -179,7 +179,7 @@ kbl(surv.s10s20.summary,
 
 ```
 
-```{r, fig.dim=c(7,9),fig.cap = "Density plots of probabilistic distributions of 10- and 20-year OS, estimated using Trial Data Only via MLE, and combining Trial Data with external evidence via the sansIPD (importance sampling) method",dpi=300}
+```{r, fig.dim=c(7,9),fig.cap = "Density plots of probabilistic distributions of 10- and 20-year OS, estimated using Trial Data Only via MLE, and combining Trial Data with external information via the sansIPD (importance sampling) method",dpi=300}
 
 # Version in use
 g.s10s20<-ggplot(data=surv.s10s20.long,aes(x=S.tstar,fill=Output,height=after_stat(scaled)))+
@@ -212,13 +212,13 @@ print(g.s10s20)
 
 # Importance sampling: model diagnostics, parameter distributions, and survival estimates
 
-The tables and figures in this section show survival curve parameter estimates, covariance structures, importance sampling diagnostics, and (probabilistic) survival curve predictions, obtained from trial data only estimated using maximum likelihood estimation (MLE), and combining trial data with external evidence using the importance sampling algorithm described in the methods section of the main article and in Appendix 1.
+The tables and figures in this section show survival curve parameter estimates, covariance structures, importance sampling diagnostics, and (probabilistic) survival curve predictions, obtained from trial data only estimated using maximum likelihood estimation (MLE), and combining trial data with external information using the importance sampling algorithm described in the methods section of the main article and in Appendix 1.
 
 
 
-## Comparisons of parameter estimates with and without external evidence 
+## Comparisons of parameter estimates with and without external information 
 
-The below tables compare parameter estimates and covariance matrices obtained from trial data only with those obtained combining trial data with external evidence, for each of the survival models under consideration. 
+The below tables compare parameter estimates and covariance matrices obtained from trial data only with those obtained combining trial data with external information, for each of the survival models under consideration. 
 
 
 ```{r paramcomp, results='asis', dpi=300, fig.height=4, fig.width=6}
@@ -231,7 +231,7 @@ for (dist in dists)
 
     kable(
       list(is.models[[dist]][["orig"]]$coefficients,is.models[[dist]]$post_mean),
-      caption=paste0("Parameter estimates obtained using trial data only (left) and combining trial data with external evidence (right): ",distributions[dist]," distribution."),
+      caption=paste0("Parameter estimates obtained using trial data only (left) and combining trial data with external information (right): ",distributions[dist]," distribution."),
       booktabs=T) %>%
     kable_styling(latex_options=c("striped","HOLD_position")) %>%
     print()
@@ -242,7 +242,7 @@ for (dist in dists)
   
   kable(
     list(is.models[[dist]][["orig"]]$cov, is.models[[dist]]$post_cov),
-    caption=paste0("Covariance matrices obtained using trial data only (left) and combining trial data with external evidence (right): ",distributions[dist], " distribution."),
+    caption=paste0("Covariance matrices obtained using trial data only (left) and combining trial data with external information (right): ",distributions[dist], " distribution."),
     booktabs=TRUE) %>%
       kable_styling(latex_options=c("striped","HOLD_position")) %>%
     print()
@@ -284,7 +284,7 @@ for (dist in dists)
 
 ## Distribution comparison plots 
 
-The below plots show parameter distributions and scatter plot estimates obtained using trial data only and by combining trial data with external evidence for the survival distributions under consideration.
+The below plots show parameter distributions and scatter plot estimates obtained using trial data only and by combining trial data with external information for the survival distributions under consideration.
 
 ```{r distplots, results='asis',fig.cap=captions2, dpi=300, fig.height=4, fig.width=7}
 
@@ -304,7 +304,7 @@ for (dist in dists)
 
 
 ## Parameter variability
-Table \@ref(tab:parameffects) shows 'Generalised variance,' i.e., determinants of variance-covariance matrices, of the parameter estimates obtained using trial data only (MLE) and combining trial data withe external evidence (IS). Formally, the generalised variance gives the area of the 95% highest density ellipse and can be interpreted as a 1-parameter measure of parameter uncertainty. 
+Table \@ref(tab:parameffects) shows 'Generalised variance,' i.e., determinants of variance-covariance matrices, of the parameter estimates obtained using trial data only (MLE) and combining trial data withe external information (IS). Formally, the generalised variance gives the area of the 95% highest density ellipse and can be interpreted as a 1-parameter measure of parameter uncertainty. 
                                                     
 <!-- , see e.g., https://stats.stackexchange.com/questions/12762/measure-of-spread-of-a-multivariate-normal-distribution . Not sure about citing stack exchange in an appendix to a paper??  AW -->
 <!-- Now that I think about it, I guess that the determinant is just the trace of the covariance (i.e., sum of the variances), offset by the covariance entries on the off diagnoal? Is my intuition ok here?? AW  -->
@@ -323,7 +323,7 @@ for (i in seq_along(dists))
 cat('\n\n')
                                                     
 knitr::kable((param.uncertainty),
-caption="Generalised variance of model parameter distributions. Comparison between parameter estimates obtained using trial data only (MLE) and combining trial data with external evidence (IS).",
+caption="Generalised variance of model parameter distributions. Comparison between parameter estimates obtained using trial data only (MLE) and combining trial data with external information (IS).",
 booktabs=TRUE) %>%
 kableExtra::kable_styling(latex_options = c("HOLD_position","striped"))
 
@@ -335,9 +335,9 @@ kableExtra::kable_styling(latex_options = c("HOLD_position","striped"))
 In this section we compare the outputs obtained from our sansIPD (importance sampling) method to that obtained using the Cooney & White method implemented in the expertsurv package. For the gen. Gamma model estimated using the expertsurv package, suitable Monte Carlo performance could not be obtained and hence results are not reported. 
 
 ```{r morecaptions}
-captions4<-paste0("Survival curves (median and 95 percent confidence intervals) obtained by combining trial data with external evidence using the sansIPD and expertsurv methods, ",distributions," distribution")
+captions4<-paste0("Survival curves (median and 95 percent confidence intervals) obtained by combining trial data with external information using the sansIPD and expertsurv methods, ",distributions," distribution")
 
-captions5<-c(paste0("Survival curve parameter distributions and covariance estimates obtainedby combining trial data with external evidence using the sansIPD and expertsurv methods, ",distributions," distribution"))
+captions5<-c(paste0("Survival curve parameter distributions and covariance estimates obtainedby combining trial data with external information using the sansIPD and expertsurv methods, ",distributions," distribution"))
 
 # delete gen gamma
 
@@ -406,7 +406,7 @@ cat('\n\n')
 
 Table \@ref(tab:AUC) and Figure \@ref(fig:AUC) compare probabilistic estimates of mean OS between the two methods. In these examples survival is capped at 100 years since some curves plateau.
 
-```{r AUC,  results='asis', fig.cap="Density plots comparing probabilistic total area under the curve (mean OS) distributions obtained from combining trial data with external evidence using the sansIPD method described in the paper, with those obtained from the method of Cooney and White implemented in the expertsurv package. "}
+```{r AUC,  results='asis', fig.cap="Density plots comparing probabilistic total area under the curve (mean OS) distributions obtained from combining trial data with external information using the sansIPD method described in the paper, with those obtained from the method of Cooney and White implemented in the expertsurv package. "}
 
 cat('\n\n')
 
@@ -452,7 +452,7 @@ ungroup() %>%
 select(Distribution,expertsurv,sansIPD,Mean.Diff=mean_diff,Var.Ratio)
 
 kbl(auc.print2,
-caption = "Comparison of probabilistic total area under the curve (mean lifetime OS) estimates, obtained from combining trial data with external evidence using the sansIPD method described in the paper, and with the method of Cooney and White implemented in the expertsurv package. Values shown are probabilstic mean and 95 percent confidence/credible intervals.",
+caption = "Comparison of probabilistic total area under the curve (mean lifetime OS) estimates, obtained from combining trial data with external information using the sansIPD method described in the paper, and with the method of Cooney and White implemented in the expertsurv package. Values shown are probabilstic mean and 95 percent confidence/credible intervals.",
 booktabs = T
 ) %>%
   kable_styling(latex_options=c("striped","HOLD_position"))
@@ -477,7 +477,7 @@ cat('\n\n')
 ## Comparisons of 5-year OS probabilities
 Table \@ref(tab:ststar) and Figure \@ref(fig:ststar) compare probabilistic estimates of 5-year OS obtained from the two methods.
 
-```{r ststar,  results='asis', fig.cap = "Density plots comparing 5-year OS estimates, obtained from combining trial data with external evidence using the sansIPD method described in the paper, with those obtained from the method of Cooney and White implemented in the expertsurv package."}
+```{r ststar,  results='asis', fig.cap = "Density plots comparing 5-year OS estimates, obtained from combining trial data with external information using the sansIPD method described in the paper, with those obtained from the method of Cooney and White implemented in the expertsurv package."}
 library(scales)
 
 surv.tstar2<-data.frame()
@@ -497,7 +497,7 @@ surv.tstar.long2<-pivot_longer(surv.tstar2,cols=1:2,values_to = "S.tstar") %>% m
 surv.tstar.summary2<-surv.tstar.long2 %>%  group_by(Distribution,Output) %>% summarise(mean=mean(S.tstar), median=median(S.tstar), sd=sd(S.tstar), lwr.95=quantile(S.tstar,0.025), upr.95=quantile(S.tstar,0.975)) %>% ungroup %>% mutate(across(where(is.numeric),~percent(.x,accuracy=0.01)))
 cat('\n\n')
 
-kbl(surv.tstar.summary2, caption = "Comparison of 5-year OS estimates, obtained from combining trial data with external evidence using the sansIPD method described in the paper, with the method of Cooney and White implemented in the expertsurv package.",
+kbl(surv.tstar.summary2, caption = "Comparison of 5-year OS estimates, obtained from combining trial data with external information using the sansIPD method described in the paper, with the method of Cooney and White implemented in the expertsurv package.",
     booktabs=T) %>%
   kable_styling(latex_options=c("striped","HOLD_position"))
 
@@ -511,7 +511,7 @@ cat('\n\n')
 
 
 
-# Scenario analysis: alternative specifications of external evidence
+# Scenario analysis: alternative specifications of external information
 
 ## Description of included scenarios
 
@@ -598,7 +598,7 @@ prior.sca.print<-prior.sca %>%
 
 kbl(prior.sca.print,
     digits=3,
-    caption="Summary of external evidence used in the base case and scenario analysis",
+    caption="Summary of external information used in the base case and scenario analysis",
     booktabs=T
     )%>%
   kable_styling(latex_options=c("striped","HOLD_position")) %>%
