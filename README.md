@@ -1,7 +1,6 @@
 The sansIPD method for incorporating external evidence in survival extrapolation
 ================
-NCPE
-2026-06-22
+
 
 ## Basic Usage
 
