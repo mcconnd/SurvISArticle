@@ -1,7 +1,7 @@
 The sansIPD method for incorporating external evidence in survival extrapolation
 ================
 NCPE
-2026-04-22
+2026-06-22
 
 ## Basic Usage
 
@@ -193,8 +193,7 @@ However, it is probably a good idea to examine the output before doing
 this. To do this we have provided the function `is_surv_viz_gg`
 which produces three output plots:
 
-1.  Importance sampling diagnostics (see \[ref\] for interpretation of
-    these)
+1.  Importance sampling diagnostics
 
 2.  Plots of parameter estimates both with and without adjustment to
     incorporate external evidence
